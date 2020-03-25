@@ -15,6 +15,7 @@ def handle_input(input):
 def print_menu():
     print()
     print('|--------------|')
+    print('|  Pluralsight |')
     print('|   Reminders  |')
     print('|     App      |')
     print('|--------------|')
