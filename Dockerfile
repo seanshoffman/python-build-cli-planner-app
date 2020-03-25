@@ -1,8 +1,10 @@
 FROM python:3.8
 
-COPY . /app
 WORKDIR /app
 
-RUN pip install -U pytest
+COPY requirements.txt /app
+RUN pip install -r requirements.txt
+
+COPY . /app
 
 CMD ["python", "/app/src/app.py"]
