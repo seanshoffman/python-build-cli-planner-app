@@ -15,8 +15,7 @@ def list_reminders():
 def add_reminder(reminder):
     print()
     reminder = input("What would you like to be reminded about?: ")
-    due = input("When is your reminder due?: ")
     
     with open('reminders.csv', 'a+', newline='\n') as file:
         writer = csv.writer(file)
-        writer.writerow([reminder, due])
+        writer.writerow([reminder])
