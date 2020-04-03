@@ -1,6 +1,6 @@
 # python-build-cli-planner-app
 
-## Task one
+## Task one - Implementing an abstract base class as a regular Python class
 
 One way to implement abstract base classes in Python is to use a regular class, and have each class method throw a NotImplementedError exception. This ensures that subclasses override the abstract methods.
 
