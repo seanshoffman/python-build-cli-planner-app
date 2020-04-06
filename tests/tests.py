@@ -1,8 +1,8 @@
 import pytest
 from src.regular_reminder import RegularReminder
 
-@pytest.mark.task_one_regular_class
 class TestApp():
+    @pytest.mark.task_one_regular_class
     def test_task_one_regular_class(self):
         with pytest.raises(NotImplementedError) as e:
             regular = RegularReminder()
