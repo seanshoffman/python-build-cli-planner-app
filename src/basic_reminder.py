@@ -6,3 +6,6 @@ class BasicReminder(ABCReminder):
 
     def __str__(self):
         return self.reminder
+
+    def is_due(self):
+        return False

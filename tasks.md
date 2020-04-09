@@ -30,7 +30,11 @@ Now that we have created our Abstract Base Class, we can create a class which im
 
 Create a new file under `src/basic_reminder.py`. From the package `abc_reminder`, import `ABCReminder`. Create a class named `BasicReminder` which derives from the `ABCReminder` ABC.
 
-There are two methods to implement on `BasicReminder`:`__iter__`, which takes a `reminder` string parameter, and sets `self.reminder = reminder`, and `__str__` which returns `self.reminder`.
+There are three methods to implement on `BasicReminder`:
+
+1. `__init__`, which takes a `reminder` string parameter, and sets `self.reminder = reminder`
+2. `__str__` which returns `self.reminder`.
+3. `is_due` which returns `False`
 
 ### Update src/database.py
 
