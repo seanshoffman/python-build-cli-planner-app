@@ -22,6 +22,19 @@ Create a new file under `src/abc_reminder.py`. From the package `abc`, import th
 
 Create a class named `ABCReminder`, deriving from the `ABC` class. Set the body of the class to simply `pass`
 
+### If it quacks like a duck
+
+Did you know that in Python it's possible to have class behave as if it is a sub-class of a given class. For example, take this test written below to verify your code when implementing the previous task;
+
+```python
+def test_task_three_abc_class_1(self):
+    ABCReminder.register(tuple)
+    assert issubclass(tuple, ABCReminder)
+    assert isinstance((), ABCReminder)
+```
+
+This test is checking whether you successfully implemented your `ABCReminder` class, derived from the `ABC` class. The test registers the class `tuple`, and then checks whether `tuple` is a subclass of `ABCReminder`, before checking whether an instance of a `tuple`, `()`, asserts True.
+
 ## Task four - Implementing a class derived from an Abstract Base Class
 
 Now that we have created our Abstract Base Class, we can create a class which implements it. An abstract base class cannot be instantiated, but when we derived a class from the ABC, it can be used to guide the implementation of the class.
