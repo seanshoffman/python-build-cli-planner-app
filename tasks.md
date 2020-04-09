@@ -96,3 +96,5 @@ def __subclasshook__(cls, C):
 ```
 
 This method checks that the given class contains the required `__iter__` and `is_due` methods. If they are prevent, the class is considered to be a subclass of ABCReminder.
+
+# Task seven - Alternatively checking for instances of reminders

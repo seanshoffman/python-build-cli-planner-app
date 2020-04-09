@@ -15,12 +15,14 @@ def list_reminders():
         print()
 
 def add_reminder(ReminderClass):
-    if issubclass(ReminderClass, ABCReminder):
-        print()
-        reminder = input("What would you like to be reminded about?: ")
-        date = input("When is that due?: ")
-        date_reminder = ReminderClass(reminder, date)
+    print()
+    reminder = input("What would you like to be reminded about?: ")
+    date = input("When is that due?: ")
+    date_reminder = ReminderClass(reminder, date)
 
-        with open('reminders.csv', 'a+', newline='\n') as file:
-            writer = csv.writer(file)
-            writer.writerow(date_reminder)
+    if isinstance(date_reminder, ABCReminder):
+        raise Exception("Invalid reminder instance")
+
+    with open('reminders.csv', 'a+', newline='\n') as file:
+        writer = csv.writer(file)
+        writer.writerow(date_reminder)

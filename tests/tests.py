@@ -5,6 +5,7 @@ from abc_reminder import ABCReminder
 from basic_reminder import BasicReminder
 from date_reminder import DateReminder
 from datetime import datetime
+from database import add_reminder
 
 class TestApp():
     @pytest.mark.task_one_regular_class_1
@@ -70,3 +71,15 @@ class TestApp():
                 pass
 
         assert issubclass(FakeReminder, ABCReminder), "__subclasshook__ is not checking for the presence of __iter__ and is_due methods"
+
+    def test_task_six_isinstance_1(self):
+        class FakeReminder():
+            def __iter__(self):
+                pass
+
+            def is_due(self):
+                pass
+
+        fake = FakeReminder()
+
+        assert isinstance(fake, ABCReminder), "__subclasshook__ is not checking for the presence of __iter__ and is_due methods"
