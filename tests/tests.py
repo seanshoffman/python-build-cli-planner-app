@@ -2,6 +2,7 @@ import pytest
 from src.regular_reminder import RegularReminder
 from src.abc_meta_reminder import ABCMetaReminder
 from src.abc_reminder import ABCReminder
+from src.basic_reminder import BasicReminder
 
 class TestApp():
     @pytest.mark.task_one_regular_class_1
@@ -40,4 +41,12 @@ class TestApp():
     def test_task_three_abc_class_2(self):
         with pytest.raises(TypeError) as e:
             abc = ABCReminder()
-        assert str(e.value) == "Can't instantiate abstract class ABCReminder with abstract methods __iter__, __str__", "The Abstract Base Class has not been correctly implemented with abstractmethods __iter__ and __str__"
+        assert str(e.value) == "Can't instantiate abstract class ABCReminder with abstract methods __str__", "The Abstract Base Class has not been correctly implemented with abstractmethods __str__"
+
+    @pytest.mark.task_four_basic_reminder_class_1
+    def test_task_four_basic_reminder_class_1(self):
+        basic = BasicReminder("Buy 6 eggs")
+        assert issubclass(BasicReminder, ABCReminder), "BasicReminder is not not a subclass of ABCReminder"
+        assert isinstance(basic, ABCReminder), "BasicReminder is not not a subclass of ABCReminder"
+        assert hasattr(basic, "reminder"), "BasicReminder is missing the property 'reminder'"
+        assert basic.reminder == "Buy 6 eggs", "BasicReminder is not taking a single constructor parameter and setting the class property 'reminder'"
