@@ -98,3 +98,16 @@ def __subclasshook__(cls, C):
 This method checks that the given class contains the required `__iter__` and `is_due` methods. If they are prevent, the class is considered to be a subclass of ABCReminder.
 
 # Task seven - Alternatively checking for instances of reminders
+
+Alternatively, instead of using `issubclass` to check the class, we can check instances of the class instead using `isinstance`.
+
+Update `src/database.py` and remove the `if issubclass(ReminderClass, ABCReminder)` wrapper.
+
+After the creation of the `date_reminder` class, add the following statement;
+
+```python
+if isinstance(date_reminder, ABCReminder):
+    raise Exception("Invalid reminder instance")
+```
+
+Here, we are checking whether an instance of a reminder class is valid, as oppose to the class itself.
