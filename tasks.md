@@ -14,10 +14,26 @@ Create a new file under `src/abc_meta_reminder.py `. From the package `abc`, imp
 
 Create a class named `ABCMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add a method, `__str__`, and set the method body to `pass`. Mark the method with the `@abstractmethod` decorator.
 
-## Task three - Implementing an abstract bsae class using the ABC Base Class
+## Task three - Implementing an abstract base class using the ABC Base Class
 
 As an alternative to using the ABCMeta Meta Class, Python developers can use the ABC Class as a base class instead.
 
 Create a new file under `src/abc_reminder.py`. From the package `abc`, import the `ABC` Class.
 
 Create a class named `ABCReminder`, deriving from the `ABC` class. Set the body of the class to simply `pass`
+
+## Task four - Implementing a class derived from an Abstract Base Class
+
+Now that we have created our Abstract Base Class, we can create a class which implements it. An abstract base class cannot be instantiated, but when we derived a class from the ABC, it can be used to guide the implementation of the class.
+
+### Implement the class
+
+Create a new file under `src/basic_reminder.py`. From the package `abc_reminder`, import `ABCReminder`. Create a class named `BasicReminder` which derives from the `ABCReminder` ABC.
+
+There are two methods to implement on `BasicReminder`:`__iter__`, which takes a `reminder` string parameter, and sets `self.reminder = reminder`, and `__str__` which returns `self.reminder`.
+
+### Update src/database.py
+
+In `src/database.py`, import the `BasicReminder` class from `basic_reminder`. In `add_reminder`, add a variable named `basic_reminder` and set it to a new instance of `BasicReminder` with the `reminder` variable passed to the constructor.
+
+Within the filter writer on Line 20, change `writer.writerow([reminder])` to `writer.writerow([basic_reminder])`.
