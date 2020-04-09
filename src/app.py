@@ -1,11 +1,12 @@
 from database import add_reminder, list_reminders
+from date_reminder import DateReminder
 
 def handle_input(input):
     if(input == "1"):
         list_reminders()
         print_menu()
     elif(input == "2"):
-        add_reminder()
+        add_reminder(DateReminder)
         list_reminders()
         print_menu()
     else:

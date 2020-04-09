@@ -68,3 +68,31 @@ For the `is_due` method, we want to check whether `self.date` is less than or eq
 In `src/database.py`, below `reminder = input(...)`, add an input for the variable `date` asking `When is that due?:`. Replace the variable `basic_reminder = ...` with `date_reminder = DateReminder(reminder, date)`. You'll need to import `DateReminder` from `date_reminder` at the top.
 
 Replace `writer.writerow(basic_reminder)` with `writer.writerow(date_reminder)`
+
+## Task six - Opening the app up to future extension
+
+Our reminders app is almost complete. One final feature we want to implement is to open it up to being extended to different types of reminders in the future. We can do this by modifing `src/database.py` to not import the reminder class itself, but instead to take a parameter containing the class to instantiate as a reminder.
+
+In `src/database.py`, add a parameter to `add_reminder` of `ReminderClass`. Change the line `date_reminder = ...` to instantiate `ReminderClass` instead of `DateReminder`. In `src/app.py`, we want to import `DateReminder` class again, and pass it to the call to `add_reminder` within `handle_input`.
+
+To guard against runtime errors and to prevent any class being passed as a reminder, we can implement subclass check on the class. To do this, wrap the body of the `add_reminder` method in `if issubclass(ReminderClass, ABCReminder):`. You'll need to import `ABCReminder`.
+
+We need to implement the subclass check in our Abstract Base Class. Head over to `src/abc_reminder.py` and add a new method, `__subclasshook__` as follows;
+
+```python
+@classmethod
+def __subclasshook__(cls, C):
+    if cls is not ABCReminder:
+        return NotImplemented
+
+    if C == tuple:
+        return True
+
+    for attr in ('__iter__', 'is_due'):
+        if not hasattr(C, attr):
+            return False
+
+    return True
+```
+
+This method checks that the given class contains the required `__iter__` and `is_due` methods. If they are prevent, the class is considered to be a subclass of ABCReminder.

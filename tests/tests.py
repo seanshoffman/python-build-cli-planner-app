@@ -60,3 +60,13 @@ class TestApp():
         assert date.reminder == "Buy 6 eggs", "DateReminder is not taking a reminder constructor parameter and setting the class property 'reminder'"
         assert date.date == datetime(2020, 1, 31, 15, 0), "DateReminder is not taking a date constructor parameter and setting the class property `parse(date)`"
 
+    @pytest.mark.task_six_issubclass_1
+    def test_task_six_issubclass_1(self):
+        class FakeReminder():
+            def __iter__(self):
+                pass
+
+            def is_due(self):
+                pass
+
+        assert issubclass(FakeReminder, ABCReminder), "__subclasshook__ is not checking for the presence of __iter__ and is_due methods"
