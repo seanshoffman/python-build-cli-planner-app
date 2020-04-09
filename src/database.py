@@ -12,7 +12,7 @@ def list_reminders():
                 print(e.ljust(32), end=' ')
         print()
 
-def add_reminder(reminder):
+def add_reminder():
     print()
     reminder = input("What would you like to be reminded about?: ")
     
