@@ -21,3 +21,16 @@ As an alternative to using the ABCMeta Meta Class, Python developers can use the
 Create a new file under `src/abc_reminder.py`. From the package `abc`, import the `ABC` Class.
 
 Create a class named `ABCReminder`, deriving from the `ABC` class. Set the body of the class to simply `pass`
+
+### If it quacks like a duck
+
+Did you know that in Python it's possible to have class behave as if it is a sub-class of a given class. For example, take this test written below to verify your code when implementing the previous task;
+
+```python
+def test_task_three_abc_class_1(self):
+    ABCReminder.register(tuple)
+    assert issubclass(tuple, ABCReminder)
+    assert isinstance((), ABCReminder)
+```
+
+This test is checking whether you successfully implemented your `ABCReminder` class, derived from the `ABC` class. The test registers the class `tuple`, and then checks whether `tuple` is a subclass of `ABCReminder`, before checking whether an instance of a `tuple`, `()`, asserts True.
