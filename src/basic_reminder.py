@@ -4,8 +4,8 @@ class BasicReminder(ABCReminder):
     def __init__(self, reminder):
         self.reminder = reminder
 
-    def __str__(self):
-        return self.reminder
+    def __iter__(self):
+        return iter([self.reminder])
 
     def is_due(self):
         return False

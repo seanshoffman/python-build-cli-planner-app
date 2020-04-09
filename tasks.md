@@ -4,7 +4,7 @@
 
 One way to implement abstract base classes in Python is to use a regular class, and have each class method throw a `NotImplementedError` exception with the message `"Method not implemented"`. This ensures that subclasses override the abstract methods. This is the only way to implement abstract classes in Python prior to version 3.4.
 
-In the file `src/regular_reminder.py`, create a class named `RegularReminder` with two class methods; `__str__(self):`, and `is_due(self):`, both raising a `NotImplemenetedError` exception.
+In the file `src/regular_reminder.py`, create a class named `RegularReminder` with two class methods; `__iter__(self):`, and `is_due(self):`, both raising a `NotImplemenetedError` exception.
 
 ## Task two - Implementing an abstract base class using the ABCMeta Meta Class
 
@@ -12,7 +12,7 @@ The modern way of implementing Abstract Base Classes in Python is to use the `ab
 
 From the package `abc`, import `ABCMeta` and `abstractmethod`. `ABCMeta` is the Meta Class which can be used to implement our Abstract Base Class, and `abstractmethod` is a decorator, which can be used to decorate methods as abstract.
 
-Create a class named `ABCMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add two methods, `__str__` and `is_due`, and set the method bodies to `pass`. Mark the methods with the `@abstractmethod` decorator.
+Create a class named `ABCMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add two methods, `__iter__` and `is_due`, and set the method bodies to `pass`. Mark the methods with the `@abstractmethod` decorator.
 
 ## Task three - Implementing an abstract bsae class using the ABC Base Class
 
@@ -46,7 +46,7 @@ Create a new file under `src/basic_reminder.py`. From the package `abc_reminder`
 There are three methods to implement on `BasicReminder`:
 
 1. `__init__`, which takes a `reminder` string parameter, and sets `self.reminder = reminder`
-2. `__str__` which returns `self.reminder`.
+2. `__iter__` which returns `iter([self.reminder])`.
 3. `is_due` which returns `False`
 
 ### Update src/database.py
