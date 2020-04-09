@@ -1,4 +1,4 @@
-from abc_reminder import ABCReminder
+from .abc_reminder import ABCReminder
 
 class BasicReminder(ABCReminder):
     def __init__(self, reminder):
