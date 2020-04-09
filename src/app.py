@@ -5,7 +5,7 @@ def handle_input(input):
         list_reminders()
         print_menu()
     elif(input == "2"):
-        add_reminder("reminder")
+        add_reminder()
         list_reminders()
         print_menu()
     else:
