@@ -53,7 +53,7 @@ There are three methods to implement on `BasicReminder`:
 
 In `src/database.py`, import the `BasicReminder` class from `basic_reminder`. In `add_reminder`, add a variable named `basic_reminder` and set it to a new instance of `BasicReminder` with the `reminder` variable passed to the constructor.
 
-Within the filter writer on Line 20, change `writer.writerow([reminder])` to `writer.writerow([basic_reminder])`.
+Within the filter writer on Line 20, change `writer.writerow([reminder])` to `writer.writerow(basic_reminder)`.
 
 ## Task five - Adding dates to reminders and implementing `is_due`
 
@@ -62,3 +62,9 @@ Create a file under `src/date_reminder.py`. From the package `abc_reminder`, imp
 Just like with `BasicReminder`, we need an `__init__` function, but this time taking both a `reminder` and `date` parameter, alongside the usual `self`. Set `self.reminder = reminder`, and `self.date = parse(date)`.
 
 We also want to define a `__iter__` method. Here, we want to return an iteration of the reminder text, and the due date formatted to ISO8601. Set the body of the method to `return iter([self.reminder,self.date.strftime("%m/%d/%YT%H:%M:%SZ")])`
+
+For the `is_due` method, we want to check whether `self.date` is less than or equal to `datetime.now()`
+
+In `src/database.py`, below `reminder = input(...)`, add an input for the variable `date` asking `When is that due?:`. Replace the variable `basic_reminder = ...` with `date_reminder = DateReminder(reminder, date)`. You'll need to import `DateReminder` from `date_reminder` at the top.
+
+Replace `writer.writerow(basic_reminder)` with `writer.writerow(date_reminder)`
