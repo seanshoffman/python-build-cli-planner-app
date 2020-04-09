@@ -1,5 +1,5 @@
 import pytest
-from src.regular_reminder import RegularReminder
+from regular_reminder import RegularReminder
 
 class TestApp():
     @pytest.mark.task_one_regular_class_1
