@@ -1,8 +1,8 @@
 import pytest
-from src.regular_reminder import RegularReminder
-from src.abc_meta_reminder import ABCMetaReminder
-from src.abc_reminder import ABCReminder
-from src.basic_reminder import BasicReminder
+from regular_reminder import RegularReminder
+from abc_meta_reminder import ABCMetaReminder
+from abc_reminder import ABCReminder
+from basic_reminder import BasicReminder
 
 class TestApp():
     @pytest.mark.task_one_regular_class_1
