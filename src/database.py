@@ -1,5 +1,5 @@
 import csv
-from basic_reminder import BasicReminder
+from date_reminder import DateReminder
 
 def list_reminders():
     f = open("reminders.csv", "r")
@@ -16,8 +16,9 @@ def list_reminders():
 def add_reminder():
     print()
     reminder = input("What would you like to be reminded about?: ")
-    basic_reminder = BasicReminder(reminder)
+    date = input("When is that due?: ")
+    date_reminder = DateReminder(reminder, date)
     
     with open('reminders.csv', 'a+', newline='\n') as file:
         writer = csv.writer(file)
-        writer.writerow([basic_reminder])
+        writer.writerow(date_reminder)

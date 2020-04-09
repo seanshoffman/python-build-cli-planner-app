@@ -4,7 +4,7 @@
 
 One way to implement abstract base classes in Python is to use a regular class, and have each class method throw a `NotImplementedError` exception with the message `"Method not implemented"`. This ensures that subclasses override the abstract methods. This is the only way to implement abstract classes in Python prior to version 3.4.
 
-In the file `src/regular_reminder.py`, create a class named `RegularReminder` with two class methods; `__str__(self):`, and `is_due(self):`, both raising a `NotImplemenetedError` exception.
+In the file `src/regular_reminder.py`, create a class named `RegularReminder` with two class methods; `__iter__(self):`, and `is_due(self):`, both raising a `NotImplemenetedError` exception.
 
 ## Task two - Implementing an abstract base class using the ABCMeta Meta Class
 
@@ -12,7 +12,7 @@ The modern way of implementing Abstract Base Classes in Python is to use the `ab
 
 From the package `abc`, import `ABCMeta` and `abstractmethod`. `ABCMeta` is the Meta Class which can be used to implement our Abstract Base Class, and `abstractmethod` is a decorator, which can be used to decorate methods as abstract.
 
-Create a class named `ABCMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add two methods, `__str__` and `is_due`, and set the method bodies to `pass`. Mark the methods with the `@abstractmethod` decorator.
+Create a class named `ABCMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add two methods, `__iter__` and `is_due`, and set the method bodies to `pass`. Mark the methods with the `@abstractmethod` decorator.
 
 ## Task three - Implementing an abstract bsae class using the ABC Base Class
 
@@ -46,7 +46,7 @@ Create a new file under `src/basic_reminder.py`. From the package `abc_reminder`
 There are three methods to implement on `BasicReminder`:
 
 1. `__init__`, which takes a `reminder` string parameter, and sets `self.reminder = reminder`
-2. `__str__` which returns `self.reminder`.
+2. `__iter__` which returns `iter([self.reminder])`.
 3. `is_due` which returns `False`
 
 ### Update src/database.py
@@ -54,3 +54,11 @@ There are three methods to implement on `BasicReminder`:
 In `src/database.py`, import the `BasicReminder` class from `basic_reminder`. In `add_reminder`, add a variable named `basic_reminder` and set it to a new instance of `BasicReminder` with the `reminder` variable passed to the constructor.
 
 Within the filter writer on Line 20, change `writer.writerow([reminder])` to `writer.writerow([basic_reminder])`.
+
+## Task five - Adding dates to reminders and implementing `is_due`
+
+Create a file under `src/date_reminder.py`. From the package `abc_reminder`, import ABCReminder again. You'll also need `parse` from `dateutil.parser`, which is a really useful third-party module for parsing dates in Python. You'll also need `datetime` from the `datetime` package.
+
+Just like with `BasicReminder`, we need an `__init__` function, but this time taking both a `reminder` and `date` parameter, alongside the usual `self`. Set `self.reminder = reminder`, and `self.date = parse(date)`.
+
+We also want to define a `__iter__` method. Here, we want to return an iteration of the reminder text, and the due date formatted to ISO8601. Set the body of the method to `return iter([self.reminder,self.date.strftime("%m/%d/%YT%H:%M:%SZ")])`
