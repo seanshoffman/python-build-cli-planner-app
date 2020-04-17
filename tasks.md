@@ -24,7 +24,7 @@ Create a class named `ABCReminder`, deriving from the `ABC` class. Set the body 
 
 ### If it quacks like a duck
 
-Did you know that in Python it's possible to have class behave as if it is a sub-class of a given class. For example, take this test written below to verify your code when implementing the previous task;
+There's no task to complete here for the code below, but it's useful to know this. Did you know that in Python it's possible to have class behave as if it is a sub-class of a given class. For example, take this test written below to verify your code when implementing the previous task;
 
 ```python
 def test_task_three_abc_class_1(self):
