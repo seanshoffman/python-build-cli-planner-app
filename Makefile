@@ -1,6 +1,4 @@
-.PHONY: test
-
-default: test
+.DEFAULT_GOAL := start
 
 build:
 	docker build -t python-build-cli-planner-app .
