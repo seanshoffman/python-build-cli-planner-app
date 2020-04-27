@@ -1,7 +1,6 @@
 class RegularReminder():
-
-    def __str__(self):
-        raise NotImplementedError("Method not implemented")
+    def __iter__(self):
+        raise NotImplementedError("Abstract method '__iter__' should not be called")
 
     def is_due(self):
-        raise NotImplementedError("Method not implemented")
+        raise NotImplementedError("Abstract method 'is_due' should not be called")
