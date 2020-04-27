@@ -12,14 +12,14 @@ class TestApp():
         with pytest.raises(NotImplementedError) as e:
             regular = RegularReminder()
             assert regular.__iter__(), "Failed to raise the correct error type"
-        assert str(e.value) == "Method not implemented", "Error message does not match 'Method not implemented' for method __iter__"
+        assert str(e.value) == "Abstract method '__iter__' should not be called", "Error message does not match 'Method not implemented' for method __iter__"
 
     @pytest.mark.task_one_regular_class_2
     def test_task_one_regular_class_2(self):
         with pytest.raises(NotImplementedError) as e:
             regular = RegularReminder()
             assert regular.is_due(), "Failed to raise the correct error type"
-        assert str(e.value) == "Method not implemented", "Error message does not match 'Method not implemented' for method is_due"
+        assert str(e.value) == "Abstract method 'is_due' should not be called", "Error message does not match 'Method not implemented' for method is_due"
 
     @pytest.mark.task_two_abc_meta_class_1
     def test_task_two_abc_meta_class_1(self):
@@ -59,4 +59,3 @@ class TestApp():
         assert date.is_due() == True, "The is_due method was not implemented correctly to compare the date property against the current time"
         assert date.reminder == "Buy 6 eggs", "DateReminder is not taking a reminder constructor parameter and setting the class property 'reminder'"
         assert date.date == datetime(2020, 1, 31, 15, 0), "DateReminder is not taking a date constructor parameter and setting the class property `parse(date)`"
-
