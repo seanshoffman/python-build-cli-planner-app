@@ -18,7 +18,15 @@ Create a class named `ABCMetaReminder` taking `ABCMeta` as its `metaclass` param
 
 ## Task three - Implementing an abstract bsae class using the ABC Base Class
 
-As an alternative to using the ABCMeta Meta Class, Python developers can use the ABC Class as a base class instead.
+As an alternative to using the ABCMeta Meta Class, Python developers can use the ABC Class as a base class instead. It is quicker to type, and an easier way to add Abstract Base Classes to your Python code. By extending the ABC class, you'll just end up using the Metaclass underneath;
+
+```python
+class ABC(metaclass=ABCMeta):
+    """Helper class that provides a standard way to create an ABC using
+    inheritance.
+    """
+    pass
+```
 
 Create a new file under `src/abc_reminder.py`. From the package `abc`, import the `ABC` Class.
 

@@ -55,9 +55,8 @@ def test_task_two_abc_meta_class_2(abstract_method_name):
 @pytest.mark.task_three_abc_class_1
 def test_task_three_abc_class_1():
     from abc_reminder import ABCReminder
-    ABCReminder.register(tuple)
-    assert issubclass(tuple, ABCReminder)
-    assert isinstance((), ABCReminder)
+    from typing import Iterable
+    assert issubclass(ABCReminder, Iterable)
 
 @pytest.mark.task_three_abc_class_2
 def test_task_three_abc_class_2():
