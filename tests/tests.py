@@ -26,7 +26,7 @@ def test_task_one_abstract_method(abstract_method_name):
     assert str(e.value) == "Abstract method has no implementation", \
            f"Error message does not match 'Abstract method has no implementation' for method `{abstract_method_name}`"
 
-@pytest.mark.task_one_regular_class_1
+@pytest.mark.task_two_abc_meta_class_1
 def test_task_two_exists():
     import abc_meta_reminder
     assert 'ABCMetaReminder' in dir(abc_meta_reminder), 'Could not find class `ABCMetaReminder` in abc_meta_reminder.py'
@@ -35,35 +35,15 @@ def test_task_two_exists():
 @pytest.mark.task_two_abc_meta_class_2
 def test_task_two_abc_meta_class_1():
     from abc_meta_reminder import ABCMetaReminder
-    ABCMetaReminder.register(tuple)
-    assert issubclass(tuple, ABCMetaReminder)
-    assert isinstance((), ABCMetaReminder)
-
-def get_decorators(source):
-    decorators = {}
-    def visit_FunctionDef(node):
-        decorators[node.name] = []
-        for n in node.decorator_list:
-            name = ''
-            if isinstance(n, ast.Call):
-                name = n.func.attr if isinstance(n.func, ast.Attribute) else n.func.id
-            else:
-                name = n.attr if isinstance(n, ast.Attribute) else n.id
-
-            args = [a.s for a in n.args] if hasattr(n, 'args') else []
-            decorators[node.name].append((name, args))
-
-    node_iter = ast.NodeVisitor()
-    node_iter.visit_FunctionDef = visit_FunctionDef
-    node_iter.visit(ast.parse(inspect.getsource(source)))
-    return decorators
+    from typing import Iterable
+    assert issubclass(ABCMetaReminder, Iterable), "Could not find ABCMetaReminder to be Iterable"
 
 @pytest.mark.task_two_abc_meta_class_3
 @pytest.mark.parametrize('abstract_method_name', [
     "__iter__",
     "is_due"
 ])
-# @pytest.mark.xfail(raises=TypeError, reason='because')
+@pytest.mark.xfail(raises=TypeError, reason='You did not add the @abstractmethod decorator to ABCMetaReminder\'s methods')
 def test_task_two_abc_meta_class_2(abstract_method_name):
     from abc_meta_reminder import ABCMetaReminder
     assert hasattr(ABCMetaReminder, abstract_method_name), f'Could not find `{abstract_method_name}` in `RegularReminder`'
