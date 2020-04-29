@@ -1,5 +1,10 @@
 # python-build-cli-planner-app
 
+In this project you will implement a simple reminder app with a command line interface (CLI). While doing so, you will learn how to use inheritance and abstract base classes to make your code modular and to ensure a contract between your classes.
+
+First, we will guide you through implementing simple text reminders. Then, you will have reminders with a deadline, which is either a date, or a date and a time. As each of these have their own class, you will see how these can play together nicely. This basis makes it easy for you to go beyond the course scope and implement other types of reminders, such as recurrent ones.
+
+
 ## Task one - Implementing an abstract base class as a regular Python class
 
 One way to implement abstract base classes in Python is to use a regular class, and have each class method throw a `NotImplementedError` exception with the message `"Abstract method has no implementation."`. This ensures that subclasses override the abstract methods. This was the only way to implement abstract classes in Python prior to the introduction of Abstract Base Clases [PEP3119](https://www.python.org/dev/peps/pep-3119/).
