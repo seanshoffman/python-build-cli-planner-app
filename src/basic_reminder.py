@@ -6,6 +6,3 @@ class BasicReminder(ABCReminder):
 
     def __iter__(self):
         return self.reminder
-
-    def is_due(self):
-        return False
