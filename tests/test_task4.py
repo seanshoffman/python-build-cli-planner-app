@@ -7,6 +7,8 @@ import database
 from deadlined_reminders import DateReminder, DeadlinedReminder
 from external_reminders import EveningReminder
 
+from reminder import PoliteReminder
+
 class DummyReminder:
     def __init__(self, *args, **kwargs):
         pass
@@ -105,3 +107,35 @@ def test_app_opening_add_reminder_isinstance():
     assert IDX_LINE_WITH_constructor is not None \
            and IDX_LINE_WITH_constructor < IDX_LINE_WITH_isinstance,\
         'You should construct the `reminder` before checking `isinstance()`'
+
+@pytest.mark.task_6_polite_reminder_touchup
+def test_registration_polite_reminder():
+    assert hasattr(PoliteReminder, '__iter__'),\
+        'You should add `__iter__` on PoliteReminder'
+
+    init_params = inspect.signature(PoliteReminder.__init__).parameters
+    assert init_params.keys() == {'self', 'text', 'date'},\
+        'In the last task PoliteReminder init should also take `date` parameter'
+
+    assert init_params['date'].default is None,\
+        'The `date` parameter of PoliteReminder.__init__ should be `None`'
+
+    pr = PoliteReminder('test', '1/1/2020')
+    polite_reminder_iter = list(pr.__iter__())
+    assert polite_reminder_iter[0] == pr.text,\
+        '`PoliteReminder.__iter__()` should return the `text` as first element'
+
+    assert len(polite_reminder_iter) == 1,\
+        '`PoliteReminder.__iter__()` should return only one item in the list'
+
+
+@pytest.mark.task_6_registration
+def test_registration_works():
+    assert hasattr(app, 'PoliteReminder'),\
+        'You should import `PoliteReminder` in `app.py`'
+
+    assert hasattr(app, 'DeadlinedReminder'),\
+        'You should import `DeadlinedReminder` in `app.py`'
+
+    assert issubclass(PoliteReminder, DeadlinedReminder),\
+        'You should register `PoliteReminder` with `DeadlinedReminder`'

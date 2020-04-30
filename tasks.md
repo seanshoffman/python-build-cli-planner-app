@@ -150,3 +150,24 @@ Alternatively, instead of using `issubclass` to check the class, we can check in
 In `src/database.py` move the creation of the `reminder` object above the class check. Then, since you have already instantiated the object, replace the call to `issubclass()` with `isinstance(reminder, DeadlinedReminder)`, still raising the `TypeError` when this fails.
 
 Now we are checking whether an instance of a reminder class is valid, as opposed to the class itself. What could be the advantages of this ? Think back to task 4.1 (TODO: Adapt number), where we had to make an assumption about the parameters taken by the  constructor `ReminderClass()`. Using `isinstance()` would allow our `add_reminder()` function to receive the instance directly, thus delegating its construction to a code that knows how to do it better.
+
+## Task six - One-time registration of a virtual subclass
+
+> **If it quaks like a duck**
+
+Before you finish off this project, you realize that back in task one you did some work that you can no longer use. Since `PoliteReminder` class it *not* implementing the prototype of `DeadlinedReminder`, passing it to `add_reminder()` would result in an error. However, the `is_due()` method of your protocol is not used anywhere yet, so you would be willing to give up the requirement of having a deadline on a reminder, as long as it asks you nicely not to remember the item.
+
+Let's see how you can make `PoliteReminder` play nicely with `add_reminder()`, without downgrading the protocol. For this, we will benefit from Python's duck-typing, which allows you to use an object as long as it has the methods you need. (*If it quacks like a duck, and it walks like a duck, then it is a duck*)
+
+Of the two methods of our protocol, the only method we use so far is `__iter__()`. So, in the file `src/reminder.py`, add the `__iter()__` method on `PoliteReminder` class, making it return an iterator through a list of 1 element, `[self.text]`.
+
+Modify also the `__init__()` method to take a `date` parameter, with a default value `None`. This makes it compatible with other constructors. You do not have to use `date` in the body.
+
+In `src/app.py` import the class `PoliteReminder` and add the base class `DeadlinedReminder` to the imports from `deadlined_reminders`. Then, at module level, you need instruct `DeadlinedReminder` to consider `PoliterReminder` as a subclass. You can do this through the `register()` method, which is available thanks to the inheritance from `ABC`/`ABCMeta`:
+```python
+DeadlinedReminder.register(PoliteReminder)
+```
+
+In the same file, in function `handle_input()` change the call to `add_reminder()` and pass `PoliteReminder` as the third parameter.
+
+You can now use your app and note that `PoliteReminder`s without a date can now be added.
