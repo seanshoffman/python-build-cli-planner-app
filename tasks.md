@@ -20,13 +20,25 @@ TODO: see the tests run when splitting into files.
 
 To test your app, run `make test`. Since you have not implemented anything, all the tests should be failing. As you progress through the tasks, more and more of them will pass. When you are stuck, running the tests may give you a hint about your error.
 
-## Task one - Implementing an abstract base class as a regular Python class
+## Task one - Inheriting from a base class
 
-One way to implement abstract base classes in Python is to use a regular class, and have each class method throw a `NotImplementedError` exception with the message `"Abstract method has no implementation."`. This ensures that subclasses override the abstract methods. This was the only way to implement abstract classes in Python prior to the introduction of Abstract Base Clases [PEP3119](https://www.python.org/dev/peps/pep-3119/).
+We are not happy with the bland text of the reminders and we'd like them to have a prefix. Either some friendly text, or maybe some [text faces](textfac.es/).
 
-The main disadvantage of this method is that the abstract base class can still be instantiated, and the error is only encountered upon calling an abstract method. We will fix this in later tasks.
+In the file `src/reminder.py` you fill find the base class `PrefixedReminder`. Note its docstring.
 
-In the file `src/regular_reminder.py`, create a class named `RegularReminder` with two class methods; `__iter__(self)`, which raises a `NotImplementedError` with the message `Abstract method '__iter__' should not be called`, and `is_due(self)`, which raises a `NotImplementedError` with the message `Abstract method 'is_due' should not be called`.
+In the same `src/reminder.py` file, create another class, `PoliteReminder`, which inherits from `PrefixedReminder`. Initiate its parent class by calling `super().__init__` with a polite prefix (the prefix should contain the word *"please"*).
+
+Now, in the file `src/database.py`, import your newly created `PoliteReminder` from `reminder` module.
+
+Then find the function `add_reminder()`. It takes the string inputted by the user. Before opening the CSV file, create a `PoliteReminder` object from the `text` variable. Save it in a variable `reminder`. Then, in the call to `writerow()`, replace `text` with `reminder.text`.
+
+### Intermediate test
+Run `make` in the root directory and add some reminders. You should notice that all of them consist of your prefix string, forgetting the text which you have inputted.
+
+This is the disadvantage of inheriting from a normal class: although its docstring specified that children should override a property or a method, it cannot enforce them to do so. In the next module we will see how to fix this, but first, let's fix the app.
+
+In the file `src/reminder.py`, find the `__init__` method of your `PoliteReminder`. Set a property `text` on the objects equal to the concatenation of `self.prefix` and the `text` parameter. Now run the app again and you should see your reminders be prefixed with the polite string.
+
 
 ## Task two - Implementing an abstract base class using the ABCMeta Meta Class
 
