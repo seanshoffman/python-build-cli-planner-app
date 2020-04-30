@@ -96,23 +96,28 @@ Since your reminders are now iterables, you can pass them directly to `writer.wr
 
 Run `make test` to ensure you have correctly followed the task. If all the tests pass, feel free to play with your app until you're ready for the next task.
 
-## Task four - Opening the app up to future extension
+## Module four - Opening the app up to future extension
+
+Our reminders app is almost complete. As you have worked hard on it, you would like to push one step forward in order to benefit from cool reminders that other people have implemented. However, as you like to keep organized, you want to accept only those reminders which support a due date and, of course, which can be serialized to your database. Let's see how we can do this.
+
+### Task 4.1 - Make `add_reminder()` accept any conforming reminder class
+
+A reminder class conforms to the protocol if it subclasses our Abstract Base Class, namely `DeadlinedReminder`. In `src/database.py`, remove the imports for `DateReminder` and `PoliteReminder` and instead import `DeadlinedReminder`.
+
+In the same file, add a third argument to `add_reminder` named `ReminderClass`. This will receive the desired *type* of reminder, which can be one of the previous two you have implemented, or a totally new one.
+
+Then, check for compliance. Before instantiating the `reminder = ...`, check `if issubclass(ReminderClass, DeadlinedReminder)` and raise a `TypeError` if this is not the case.
+
+Now, just below, change the variable `reminder = ...` to instantiate `ReminderClass` instead of `DateReminder`. We will assume that `ReminderClass()` constructor takes at least the same `text` and `date` parameters, and has sane defaults for the others.
+
+In `src/app.py`, we want to import `DateReminder` class again, and pass it to the call to `add_reminder()` within `handle_input()`.
+
+Check that your app still works.
+
+### Task 4.2 - Accept any virtual subclass
 
 
-We also want to define a `__iter__` method. Here, we want to return an *iterator* over the  the reminder text, and the due date formatted to ISO8601. Set the body of the method to `return iter([self.reminder,self.date.strftime("%m/%d/%YT%H:%M:%SZ")])`
-
-
-In `src/database.py`,  Replace the variable `basic_reminder = ...` with `date_reminder = DateReminder(reminder, date)`. You'll need to import `DateReminder` from `date_reminder` at the top.
-
-Replace `writer.writerow(basic_reminder)` with `writer.writerow(date_reminder)`
-
-## Task six - Opening the app up to future extension
-
-Our reminders app is almost complete. As you have worked hard on it, you would like to push one step forward in order to benefit from cool reminders that other people have implemented. However, as you like to keep organized, you want to accept only those which support a due date and, of course, which can be serialized to your database. Let's see how we can do this.
-
-Then, in the same file, add a third argument to `add_reminder` named `ReminderClass`. This will receive the desired type of reminder, which can be one of the previous two you have implemented, or a totally new one. The only requirement is that it conforms to your protocol.
-
-A reminder class conforms to the protocol if it subclasses our Abstract Base Class, namely `DeadlinedReminder`. However, we do not control the source of `ReminderClass` to make it inherit directly from `DeadlinedReminder`. Therefore, we will instruct the ABC to accept an instance as being a subclass if it implements `__iter__()` and `is_due()`.
+ However, we may not control the source of `ReminderClass` to make it inherit directly from `DeadlinedReminder`. Therefore, we will instruct the ABC to accept an instance as being a subclass if it implements `__iter__()` and `is_due()`.
 
 Head over to `src/deadlined_reminders.py` and in the class `DeadlinedReminder` define a class method `__subclasshook__(cls, Other)`, as follows:
 
@@ -133,13 +138,7 @@ def __subclasshook__(cls, Other):
 
 This method checks that the given class contains the required `__iter__` and `is_due` methods anywhere in its hierarchy. If they are present, the class is considered to be a subclass of DeadlinedReminder.
 
-Our ABC is now ready to check for compliance. In `src/database.py`, you can remove the imports for `DateReminder` and `PoliteReminder` and instead import `DeadlinedReminder`.
-
-Then, before instantiating the `reminder = ...`, check `if issubclass(ReminderClass, DeadlinedReminder)` and raise an exception if it is not the case.
-
-Now, just below, change the variable `reminder = ...` to instantiate `ReminderClass` instead of `DateReminder`. We will assume it takes at least the same `text` and `date` parameters, and has sane defaults for the others.
-
-In `src/app.py`, we want to import `DateReminder` class again, and pass it to the call to `add_reminder` within `handle_input`.
+Then, b
 
 
 ## Task seven - Alternatively checking for instances of reminders
