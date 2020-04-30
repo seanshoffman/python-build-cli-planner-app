@@ -1,9 +1,15 @@
 import pytest
 import inspect
 
+import app
 import database
-from deadlined_reminders import DateReminder
+from deadlined_reminders import DateReminder, DeadlinedReminder
 from external_reminders import EveningReminder
+
+class DummyReminder:
+    def __init__(self, *args, **kwargs):
+        pass
+
 
 @pytest.mark.task_4_correct_imports
 def test_app_opening_correct_imports():
@@ -32,10 +38,6 @@ def test_app_opening_add_reminder_date():
 
 @pytest.mark.task_4_add_reminder_incorrect
 def test_app_opening_add_reminder_incorrect():
-    class DummyReminder:
-        def __init__(self, *args, **kwargs):
-            pass
-
     # NOTE: pytest.raises(TypeError) does not work here as we want custom message
     #       for the other exceptions, which would bubble up otherwise
     try:
@@ -47,6 +49,30 @@ def test_app_opening_add_reminder_incorrect():
                     ' Did you forget `issubclass()`?')
 
 
-@pytest.mark.task_4_add_reminder_datetime
-def test_app_opening_add_reminder_datetime():
-    database.add_reminder('test_reminder', '1/1/2020', EveningReminder)
+@pytest.mark.task_4_subclasshook
+def test_app_opening_subclasshook():
+    assert '__subclasshook__' in DeadlinedReminder.__dict__,\
+        'Could not find `__subclasshook__` onto `DeadlinedReminder`'
+
+    # NOTE: we should not getattr, as that one is bound *to the class* and the check fails
+    hook = DeadlinedReminder.__dict__['__subclasshook__']
+    assert isinstance(hook, classmethod),\
+        '`__subclasshook__` should be a classmethod'
+
+    assert issubclass(EveningReminder, DeadlinedReminder),\
+        '`__subclasshook__` gives wrong result for class that'\
+            ' respects the protocol of `DeadlinedReminder`'
+
+    assert not issubclass(DummyReminder, DeadlinedReminder),\
+        '`__subclasshook__` gives wrong result for class that '\
+            ' does not respect the protocol of `DeadlinedReminder`'
+
+@pytest.mark.task_4_add_reminder_evening
+def test_app_opening_add_reminder_evening():
+    assert hasattr(app, 'EveningReminder'),\
+        'You did not import/use `EveningReminder` in `app.py`'
+
+    try:
+        database.add_reminder('test_reminder', '1/1/2020', EveningReminder)
+    except Exception as exc:
+        pytest.fail('Could not pass an `EveningReminder` to `add_reminder`')

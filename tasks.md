@@ -116,19 +116,22 @@ Check that your app still works.
 
 ### Task 4.2 - Accept any virtual subclass
 
+In the file `src/external_reminders.py` you fill find a few reminder classes that are very similar to yours. Notably, there is `EveningReminder` which is always due at `8pm` on its given date. You would like to be able to add such a reminder to your database.
 
- However, we may not control the source of `ReminderClass` to make it inherit directly from `DeadlinedReminder`. Therefore, we will instruct the ABC to accept an instance as being a subclass if it implements `__iter__()` and `is_due()`.
+In the file `src/app.py` import `EveningReminder` from `external_reminders`. Then, change the call to `add_reminder()` to pass `EveningReminder` instead of `DateReminder`. Don't forget that you are passing the class, not an object.
 
-Head over to `src/deadlined_reminders.py` and in the class `DeadlinedReminder` define a class method `__subclasshook__(cls, Other)`, as follows:
+If you play with your app at this point and try to add a reminder, you will notice that it no longer works. The protocol check that you have implemented above is not recognizing `EveningReminder` as a subclass of `DeadlinedReminder`. And, since it is external, you cannot make it inherit from your Abstract Base Class `DeadlinedReminder`. However, you notice that it *does* implement your protocol, defining the `__iter__()` and `is_due()` methods, which makes it a *virtual* subclass. Let's make `DeadlinedReminder` detect this.
+
+Head over to `src/deadlined_reminders.py` and in the class `DeadlinedReminder` define a class method `__subclasshook__(cls, subclass)`, as follows:
 
 ```python
 @classmethod
-def __subclasshook__(cls, Other):
+def __subclasshook__(cls, subclass):
     if cls is not DeadlinedReminder:
         return NotImplemented
 
     def attr_in_hierarchy(attr):
-        return any (attr in SuperClass.__dict__ for SuperClass in Other.__mro__)
+        return any (attr in SuperClass.__dict__ for SuperClass in subclass.__mro__)
 
     if not all(attr_in_hierarchy(attr) for attr in ('__iter__', 'is_due')):
         return NotImplemented
@@ -136,10 +139,9 @@ def __subclasshook__(cls, Other):
     return True
 ```
 
-This method checks that the given class contains the required `__iter__` and `is_due` methods anywhere in its hierarchy. If they are present, the class is considered to be a subclass of DeadlinedReminder.
+This class method is called as part of `issublcass(ReminderClass, DeadlinedReminder)`. It checks that the given `subclass` contains the required methods `__iter__()` and `is_due()` anywhere in its hierarchy. If they are present, the class is considered to be a virtual subclass of `DeadlinedReminder`.
 
-Then, b
-
+If you have implemented this correctly, you will see that when you run your app now the reminders that you add will have a third column indicating their time, and this should be `8pm`. The AbstractBaseClass is now recognizing `EveningReminder` as a subclass of its own because it implements the required methods.
 
 ## Task seven - Alternatively checking for instances of reminders
 
