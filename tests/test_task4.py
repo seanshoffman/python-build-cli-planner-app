@@ -1,5 +1,6 @@
 import pytest
 import inspect
+import re
 
 import app
 import database
@@ -76,3 +77,31 @@ def test_app_opening_add_reminder_evening():
         database.add_reminder('test_reminder', '1/1/2020', EveningReminder)
     except Exception as exc:
         pytest.fail('Could not pass an `EveningReminder` to `add_reminder`')
+
+
+@pytest.mark.task_5_add_reminder_isinstance
+def test_app_opening_add_reminder_isinstance():
+    code_lines, starts_on = inspect.getsourcelines(database.add_reminder)
+    EXISTS_LINE_WITH_issubclass = any('issubclass' in line for line in code_lines)
+    assert not EXISTS_LINE_WITH_issubclass,\
+        'You should remove the `issubclass` check'
+
+    IDX_LINE_WITH_isinstance = None
+    IDX_LINE_WITH_constructor = None
+    for idx, line in enumerate(code_lines):
+        if re.findall(r'ReminderClass\(.*\)', line):
+            IDX_LINE_WITH_constructor = idx
+            break
+
+    for idx, line in enumerate(code_lines):
+        if re.findall(r'isinstance\(.*\)', line):
+            IDX_LINE_WITH_isinstance = idx
+            assert 'ReminderClass' not in line,\
+                'You should call `isinstance` with the instance, not the class'
+            break
+
+    assert IDX_LINE_WITH_isinstance is not None,\
+        'You should add a check for `isinstance`'
+    assert IDX_LINE_WITH_constructor is not None \
+           and IDX_LINE_WITH_constructor < IDX_LINE_WITH_isinstance,\
+        'You should construct the `reminder` before checking `isinstance()`'

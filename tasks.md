@@ -143,17 +143,10 @@ This class method is called as part of `issublcass(ReminderClass, DeadlinedRemin
 
 If you have implemented this correctly, you will see that when you run your app now the reminders that you add will have a third column indicating their time, and this should be `8pm`. The AbstractBaseClass is now recognizing `EveningReminder` as a subclass of its own because it implements the required methods.
 
-## Task seven - Alternatively checking for instances of reminders
+## Task five - Alternatively checking for instances of reminders
 
-Alternatively, instead of using `issubclass` to check the class, we can check instances of the class instead using `isinstance`.
+Alternatively, instead of using `issubclass` to check the class, we can check instances of the class using `isinstance`.
 
-Update `src/database.py` and remove the `if issubclass(ReminderClass, ABCReminder)` wrapper.
+In `src/database.py` move the creation of the `reminder` object above the class check. Then, since you have already instantiated the object, replace the call to `issubclass()` with `isinstance(reminder, DeadlinedReminder)`, still raising the `TypeError` when this fails.
 
-After the creation of the `date_reminder` class, add the following statement;
-
-```python
-if isinstance(date_reminder, ABCReminder):
-    raise Exception("Invalid reminder instance")
-```
-
-Here, we are checking whether an instance of a reminder class is valid, as oppose to the class itself.
+Now we are checking whether an instance of a reminder class is valid, as opposed to the class itself. What could be the advantages of this ? Think back to task 4.1 (TODO: Adapt number), where we had to make an assumption about the parameters taken by the  constructor `ReminderClass()`. Using `isinstance()` would allow our `add_reminder()` function to receive the instance directly, thus delegating its construction to a code that knows how to do it better.
