@@ -33,7 +33,7 @@ Now, in the file `src/database.py`, import your newly created `PoliteReminder` f
 Then find the function `add_reminder()`. It takes the string inputted by the user. Before opening the CSV file, create a `PoliteReminder` object from the `text` variable. Save it in a variable `reminder`. Then, in the call to `writerow()`, replace `text` with `reminder.text`.
 
 ### Intermediate test
-Run `make` in the root directory and add some reminders. You should notice that all of them consist of your prefix string, forgetting the text which you have inputted.
+Run `make` in the root directory and add some reminders. You should notice that all of them consist of your prefix string and some placeholder text, forgetting your input.
 
 This is the disadvantage of inheriting from a normal class: although its docstring specified that children should override a property or a method, it cannot enforce them to do so. In the next module we will see how to fix this, but first, let's fix the app.
 
