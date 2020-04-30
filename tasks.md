@@ -60,37 +60,49 @@ In the same `src/deadlined_reminders.py` file also import the `ABC` class from t
 
 Add the same two methods as `@abstractmethod`, namely `__iter__()` and `is_due()`.
 
-## Task four - Implementing a class derived from an Abstract Base Class
+For convenience, in the following tasks we will use the `DeadlinedReminder` as a base class.
+
+## Task three - Implementing a class derived from an Abstract Base Class
 
 Now that we have created our Abstract Base Class, we can create a class which implements it. An abstract base class cannot be instantiated, but when we derived a class from the ABC, it can be used to guide the implementation of the class.
 
 ### Implement the class
 
-Create a new file under `src/basic_reminder.py`. From the package `abc_reminder`, import `ABCReminder`. Create a class named `BasicReminder` which derives from the `ABCReminder` ABC.
+In the file under `src/deadlined_reminders.py` import `parse` from `dateutil.parser`, which is a really useful third-party module for parsing dates in Python. You'll also need `datetime` from the `datetime` package.
 
-There are three methods to implement on `BasicReminder`:
+Then, create a class named `DateReminder` which derives from the `DeadlinedReminder` ABC.
+There are three methods to implement on `DateReminder`: `__init__()`, `__iter__()` and `is_due()`.
 
-1. `__init__`, which takes a `reminder` string parameter, and sets `self.reminder = reminder`
-2. `__iter__` which returns `iter([self.reminder])`.
-3. `is_due` which returns `False`
+`__init__()` takes a `text` and `date` parameter, alongside the usual `self`. Set `self.text = text`, and `self.date = parse(date)`. As your base class' `__init__()` is empty, there is no need to call it here.
 
-### Update src/database.py
+The reminder will be serialized into CSV file, with each property on a column. The CSV writer expects an iterable for each row, so you should implement the `__iter__()` method to return an iterator. The iterator, in turn, would return first the reminder's `text`, then and the due date formatted to ISO8601. The easiest way to create this iterator is to use the builtin `iter([text, formatted_date])`. You can format the date using `self.date.strftime("%m/%d/%YT%H:%M:%SZ")`.
 
-In `src/database.py`, import the `BasicReminder` class from `basic_reminder`. In `add_reminder`, add a variable named `basic_reminder` and set it to a new instance of `BasicReminder` with the `reminder` variable passed to the constructor.
+For the `is_due()` method, we want to check whether `self.date` is less than or equal to `datetime.now()`.
 
-Within the filter writer on Line 20, change `writer.writerow([reminder])` to `writer.writerow(basic_reminder)`.
+### Update the interface and database
+
+You will have to ask the user for a date to go into your new reminder. In the file `src/app.py`, find the line `reminder = input(...)` under the case `"2"` of `handle_input()` function. Below it, add another input for the variable `date` asking `When is that due?:`. Then pass the `date` as a second parameter to the `add_reminder()` function.
+
+In `src/database.py`, import the `DateReminder` class from `deadlined_reminders`.
+
+
+In the same file, add a second argument to the function `add_reminder()`, naming it `date`.
+
+In the same function, change the `reminder` variable to be a new instance of `DateReminder`, instead of `PoliteReminder`. You should construct this with the `text` and `date` received as parameters.
+
+Since your reminders are now iterables, you can pass them directly to `writer.writerow()`, without the need for a list, i.e. `writer.writerow(reminder)`.
+
+### Test your app
+
+Run `make test` to ensure you have correctly followed the task. If all the tests pass, feel free to play with your app until you're ready for the next task.
 
 ## Task five - Adding dates to reminders and implementing `is_due`
 
-Create a file under `src/date_reminder.py`. From the package `abc_reminder`, import ABCReminder again. You'll also need `parse` from `dateutil.parser`, which is a really useful third-party module for parsing dates in Python. You'll also need `datetime` from the `datetime` package.
 
-Just like with `BasicReminder`, we need an `__init__` function, but this time taking both a `reminder` and `date` parameter, alongside the usual `self`. Set `self.reminder = reminder`, and `self.date = parse(date)`.
+We also want to define a `__iter__` method. Here, we want to return an *iterator* over the  the reminder text, and the due date formatted to ISO8601. Set the body of the method to `return iter([self.reminder,self.date.strftime("%m/%d/%YT%H:%M:%SZ")])`
 
-We also want to define a `__iter__` method. Here, we want to return an iteration of the reminder text, and the due date formatted to ISO8601. Set the body of the method to `return iter([self.reminder,self.date.strftime("%m/%d/%YT%H:%M:%SZ")])`
 
-For the `is_due` method, we want to check whether `self.date` is less than or equal to `datetime.now()`
-
-In `src/database.py`, below `reminder = input(...)`, add an input for the variable `date` asking `When is that due?:`. Replace the variable `basic_reminder = ...` with `date_reminder = DateReminder(reminder, date)`. You'll need to import `DateReminder` from `date_reminder` at the top.
+In `src/database.py`,  Replace the variable `basic_reminder = ...` with `date_reminder = DateReminder(reminder, date)`. You'll need to import `DateReminder` from `date_reminder` at the top.
 
 Replace `writer.writerow(basic_reminder)` with `writer.writerow(date_reminder)`
 
