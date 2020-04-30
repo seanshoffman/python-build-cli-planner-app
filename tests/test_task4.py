@@ -21,7 +21,7 @@ def test_app_opening_add_reminder_third_parameter():
     signature = inspect.signature(database.add_reminder)
     params = list(signature.parameters)
     assert len(params) == 3,\
-        'You should pass a third parameter to `add_import`'
+        'You should pass a third parameter to `add_reminder`'
     assert params[2] == 'ReminderClass',\
         'The third parameter should be `ReminderClass`'
 
@@ -44,8 +44,7 @@ def test_app_opening_add_reminder_incorrect():
         pass
     except Exception:
         pytest.fail('You should only allow conforming classes in `add_reminder`.'
-                    ' Did you forget `issubclass()`?'
-)
+                    ' Did you forget `issubclass()`?')
 
 
 @pytest.mark.task_4_add_reminder_datetime

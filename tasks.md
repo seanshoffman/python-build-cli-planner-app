@@ -100,7 +100,7 @@ Run `make test` to ensure you have correctly followed the task. If all the tests
 
 Our reminders app is almost complete. As you have worked hard on it, you would like to push one step forward in order to benefit from cool reminders that other people have implemented. However, as you like to keep organized, you want to accept only those reminders which support a due date and, of course, which can be serialized to your database. Let's see how we can do this.
 
-### Task 4.1 - Make `add_reminder()` accept any conforming reminder class
+### Task 4.1 - Make `add_reminder()` accept a conforming reminder class
 
 A reminder class conforms to the protocol if it subclasses our Abstract Base Class, namely `DeadlinedReminder`. In `src/database.py`, remove the imports for `DateReminder` and `PoliteReminder` and instead import `DeadlinedReminder`.
 
