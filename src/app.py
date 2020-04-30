@@ -1,5 +1,6 @@
 from database import add_reminder, list_reminders
 from deadlined_reminders import DateReminder
+from external_reminders import EveningReminder
 
 def handle_input():
     choice = input("Choice: ")
@@ -14,7 +15,7 @@ def handle_input():
         reminder = input("What would you like to be reminded about?: ")
         date = input('When is that due?:')
 
-        add_reminder(reminder, date, DateReminder)
+        add_reminder(reminder, date, EveningReminder)
         list_reminders()
     else:
         print("Invalid menu option")
@@ -40,4 +41,5 @@ def main():
     while handle_input():
         print_menu()
 
-main()
+if __name__ == '__main__':
+    main()
