@@ -42,32 +42,23 @@ In the file `src/reminder.py`, find the `__init__` method of your `PoliteReminde
 
 ## Task two - Implementing an abstract base class using the ABCMeta Meta Class
 
+Now we would like reminders to have a deadline. These can be of multiple types: on a day, at a given time, recurrent, etc. Each of these will represent their own python `class` but we want them to behave similarly, while avoiding the pitfalls of task 1. Therefore, they will inherit from an Abstract Base Class, which will enforce them to implement the required methods, namely `is_due()` and `__iter__()`, since they will need to serialize multiple fields.
+
 The modern way of implementing Abstract Base Classes in Python is to use the `abc` package.
 
-Create a new file under `src/abc_meta_reminder`. From the package `abc`, import `ABCMeta` and `abstractmethod`. `ABCMeta` is the Meta Class which can be used to implement our Abstract Base Class, and `abstractmethod` is a decorator, which can be used to decorate methods as abstract.
+### Using ABCMeta
 
-Create a class named `ABCMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add two methods, `__iter__` and `is_due`, and set the method bodies to `pass`. Mark the methods with the `@abstractmethod` decorator.
+Create a new file under `src` and name it `deadlined_reminders.py`. In there, from the package `abc`, import `ABCMeta` and `abstractmethod`. `ABCMeta` is the Meta Class which can be used to implement our Abstract Base Class, and `abstractmethod` is a decorator, which can be used to decorate methods as abstract. Note that not all methods on an Abstract Base Class need to be abstract. However, if *none* is abstract, then the class itself is no longer abstract.
 
-## Task three - Implementing an abstract bsae class using the ABC Base Class
+Create a class named `DeadlinedMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add two methods, `__iter__()` and `is_due()`, and set the method bodies to `pass`. Mark the methods with the `@abstractmethod` decorator.
 
-As an alternative to using the ABCMeta Meta Class, Python developers can use the ABC Class as a base class instead.
+### Using ABC
 
-Create a new file under `src/abc_reminder.py`. From the package `abc`, import the `ABC` Class.
+Note that since python 3.4 you can also [create an Abstract Base Class by inheriting](https://docs.python.org/3/whatsnew/3.4.html#abc) from the `ABC` class of the `abc` module. This has the same effect as using the metaclass, with the small caveat that metaclass conflicts may be now hidden.
 
-Create a class named `ABCReminder`, deriving from the `ABC` class. Set the body of the class to simply `pass`
+In the same `src/deadlined_reminders.py` file also import the `ABC` class from the `abc` module. Then create another abstract base class named `DeadlinedReminder`. This one should *inherit* from `ABC`.
 
-### If it quacks like a duck
-
-There's no task to complete here for the code below, but it's useful to know this. Did you know that in Python it's possible to have class behave as if it is a sub-class of a given class. For example, take this test written below to verify your code when implementing the previous task;
-
-```python
-def test_task_three_abc_class_1(self):
-    ABCReminder.register(tuple)
-    assert issubclass(tuple, ABCReminder)
-    assert isinstance((), ABCReminder)
-```
-
-This test is checking whether you successfully implemented your `ABCReminder` class, derived from the `ABC` class. The test registers the class `tuple`, and then checks whether `tuple` is a subclass of `ABCReminder`, before checking whether an instance of a `tuple`, `()`, asserts True.
+Add the same two methods as `@abstractmethod`, namely `__iter__()` and `is_due()`.
 
 ## Task four - Implementing a class derived from an Abstract Base Class
 
