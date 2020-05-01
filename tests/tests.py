@@ -26,8 +26,8 @@ class DummyReminder:
 
 # === TASK 1 ========================================================================
 
-@pytest.mark.task_one_regular_class_exists
-def test_task_one_class_exists():
+@pytest.mark.task_1_regular_class_exists
+def test_task_1_regular_class_exists():
     assert hasattr(reminder, 'PoliteReminder'), \
         'You should implement class `PoliteReminder` in reminder.py'
     assert inspect.isclass(reminder.PoliteReminder), \
@@ -35,8 +35,8 @@ def test_task_one_class_exists():
     assert issubclass(reminder.PoliteReminder, reminder.PrefixedReminder), \
         '`PoliteReminder` should inherit from `PrefixedReminder`'
 
-@pytest.mark.task_one_regular_class_implementation
-def test_task_one_regular_class_implementation():
+@pytest.mark.task_1_regular_class_implementation
+def test_task_1_regular_class_implementation():
     polite_reminder = reminder.PoliteReminder('test_string')
     assert hasattr(polite_reminder, 'prefix'), \
         'No `prefix` property on `PoliteReminder`. Did you inherit from `PrefixedReminder`?'
@@ -45,18 +45,18 @@ def test_task_one_regular_class_implementation():
 
 # === TASK 2 ========================================================================
 
-@pytest.mark.task_two_overriding_text
-def test_task_one_overriding_text():
+@pytest.mark.task_2_overriding_text
+def test_task_2_overriding_text():
     polite_reminder = reminder.PoliteReminder('test_string')
     assert polite_reminder.text != polite_reminder.prefix + '<placeholder_text>',\
         'You should override the `text` property with the concatenation'
     assert polite_reminder.text == polite_reminder.prefix + 'test_string',\
         '`PoliteReminder` should prefix the passed string with your prefix'
 
-# === TASK 3 ========================================================================
+# === TASK 3-4 ======================================================================
 
-@pytest.mark.task_three_module_exists
-def test_task_three_module_exists():
+@pytest.mark.task_3_module_exists
+def test_task_3_module_exists():
     assert DEADLINED_REMINDERS_IMPORTED, \
         'Could not find module `deadlined_reminders`. Check the name is correct...'
 
