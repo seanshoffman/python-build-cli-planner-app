@@ -1,7 +1,7 @@
-from database import add_reminder, list_reminders
-from deadlined_reminders import DateReminder, DeadlinedReminder
-from external_reminders import EveningReminder
-from reminder import PoliteReminder
+from src.database import add_reminder, list_reminders
+from src.deadlined_reminders import DateReminder, DeadlinedReminder
+from src.external_reminders import EveningReminder
+from src.reminder import PoliteReminder
 
 DeadlinedReminder.register(PoliteReminder)
 

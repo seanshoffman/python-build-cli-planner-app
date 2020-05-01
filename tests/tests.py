@@ -6,16 +6,16 @@ from abc import ABCMeta, ABC
 from collections.abc import Iterable
 from dateutil.parser import parse
 
-import app
-import database
-import reminder
+from src import app
+from src import database
+from src import reminder
 try:
-    import deadlined_reminders as dr
+    from src import deadlined_reminders as dr
     DEADLINED_REMINDERS_IMPORTED = True
 except ImportError:
     DEADLINED_REMINDERS_IMPORTED = False
 
-from external_reminders import EveningReminder
+from src.external_reminders import EveningReminder
 
 # This is for generality of task of implementation the concrete class
 CONCRETE_CLASS_NAME = 'DateReminder'
