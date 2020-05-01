@@ -6,7 +6,7 @@ We are not happy with the bland text of the reminders and we'd like them to have
 
 In the file `src/reminder.py` you fill find the base class `PrefixedReminder`. Note its docstring.
 
-In the same `src/reminder.py` file, create another class, `PoliteReminder`, which inherits from `PrefixedReminder`. Initiate its parent class by calling `super().__init__` with a polite prefix (the prefix should contain the word *"please"*).
+In the same `src/reminder.py` file, create another class, `PoliteReminder`, which inherits from `PrefixedReminder`. Initiate its parent class by calling `super().__init__()` with a polite prefix (the prefix should contain the word *"please"*).
 
 Now, in the file `src/database.py`, import your newly created `PoliteReminder` from `reminder` module.
 
@@ -16,6 +16,8 @@ Then find the function `add_reminder()`. It takes the string inputted by the use
 Run `make` in the root directory and add some reminders. You should notice that all of them consist of your prefix string and some placeholder text, forgetting your input.
 
 This is the disadvantage of inheriting from a normal class: although its docstring specified that children should override a property or a method, it cannot enforce them to do so. In the next module we will see how to fix this, but first, let's fix the app.
+
+## Task two - Overriding properties from base class
 
 In the file `src/reminder.py`, find the `__init__` method of your `PoliteReminder`. Set a property `text` on the objects equal to the concatenation of `self.prefix` and the `text` parameter. Now run the app again and you should see your reminders be prefixed with the polite string.
 
