@@ -91,8 +91,10 @@ def test_abstract_methods_exist(class_name, method_name):
         f'Method {method_name} is not abstract in class {class_name}'
 
 
-@pytest.mark.task_three_class_exists_concrete
-def test_task_three_classe_exists_concrete():
+# === TASK 5 ========================================================================
+
+@pytest.mark.task_5_concrete_class_exists
+def test_task_5_concrete_class_exists():
     assert hasattr(dr, CONCRETE_CLASS_NAME), \
         f'Could not find class `{CONCRETE_CLASS_NAME}` in `deadlined_reminders.py`'
 
@@ -102,16 +104,20 @@ def test_task_three_classe_exists_concrete():
     assert issubclass(cls, dr.DeadlinedReminder), \
         f'{CONCRETE_CLASS_NAME} should subclass `DeadlinedReminder`'
 
+
+@pytest.mark.task_5_concrete_class_no_abstract
+def test_task_5_concrete_class_no_abstract():
+    cls = getattr(dr, CONCRETE_CLASS_NAME)
     assert not cls.__abstractmethods__,\
         f'{CONCRETE_CLASS_NAME} should implement all virtual methods'
 
 
-@pytest.mark.task_three_methods
+@pytest.mark.task_5_methods
 @pytest.mark.parametrize('method_name', [
-    '__iter__',
-    'is_due'
+    pytest.param('is_due'  , marks=pytest.mark.task_5),
+    pytest.param('__iter__', marks=pytest.mark.task_6),
 ])
-def test_task_three_methods(method_name):
+def test_task_5_methods(method_name):
     cls = getattr(dr, CONCRETE_CLASS_NAME)
     assert hasattr(cls, method_name), f'Could not find `{method_name}` in `{CONCRETE_CLASS_NAME}`'
 
@@ -120,22 +126,22 @@ def test_task_three_methods(method_name):
     assert inspect.ismethod(method),\
         f'{method_name} is not a method on {CONCRETE_CLASS_NAME}. Did you forget `self` ?'
 
-@pytest.mark.task_three_init
-def test_init():
+@pytest.mark.task_5_init
+def test_task_5_init():
     cls = getattr(dr, CONCRETE_CLASS_NAME)
     reminder = cls('test_string', '01/01/2020')
     assert reminder.text == 'test_string', f'Incorrect text set in {CONCRETE_CLASS_NAME}.__init__()'
     assert reminder.date == parse('01/01/2020'), f'Incorrect date set in {CONCRETE_CLASS_NAME}.__init__()'
 
-@pytest.mark.task_three_iter
-def test_iter():
+@pytest.mark.task_5_iter
+def test_task_5_iter():
     cls = getattr(dr, CONCRETE_CLASS_NAME)
     reminder = cls('test_string', '01/01/2020')
     assert list(reminder) == ['test_string', '01/01/2020T00:00:00Z'],\
         f'Incorect iterable representation of {CONCRETE_CLASS_NAME}'
 
-@pytest.mark.task_three_is_due
-def test_is_due():
+@pytest.mark.task_5_is_due
+def test_task_5_is_due():
     cls = getattr(dr, CONCRETE_CLASS_NAME)
     reminder = cls('test_string', '01/01/2020')
     assert     reminder.is_due(), f'{CONCRETE_CLASS_NAME}.is_due() returns False for a past date'
