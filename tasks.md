@@ -21,20 +21,21 @@ This is the disadvantage of inheriting from a normal class: although its docstri
 
 In the file `src/reminder.py`, find the `__init__` method of your `PoliteReminder`. Set a property `text` on the objects equal to the concatenation of `self.prefix` and the `text` parameter. Now run the app again and you should see your reminders be prefixed with the polite string.
 
+---
 
-## Task two - Implementing an abstract base class using the ABCMeta Meta Class
+## Abstract base classes
 
 Now we would like reminders to have a deadline. These can be of multiple types: on a day, at a given time, recurrent, etc. Each of these will represent their own python `class` but we want them to behave similarly, while avoiding the pitfalls of task 1. Therefore, they will inherit from an Abstract Base Class, which will enforce them to implement the required methods, namely `is_due()` and `__iter__()`, since they will need to serialize multiple fields.
 
 The modern way of implementing Abstract Base Classes in Python is to use the `abc` package.
 
-### Using ABCMeta
+## Task three - Implementing an abstract base class using the `ABCMeta` Metaclass
 
 Create a new file under `src` and name it `deadlined_reminders.py`. In there, from the package `abc`, import `ABCMeta` and `abstractmethod`. `ABCMeta` is the Meta Class which can be used to implement our Abstract Base Class, and `abstractmethod` is a decorator, which can be used to decorate methods as abstract. Note that not all methods on an Abstract Base Class need to be abstract. However, if *none* is abstract, then the class itself is no longer abstract.
 
 Create a class named `DeadlinedMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add two methods, `__iter__()` and `is_due()`, and set the method bodies to `pass`. Mark the methods with the `@abstractmethod` decorator.
 
-### Using ABC
+## Task four - Implementing an abstract base class by extending the `ABC` Class
 
 Note that since python 3.4 you can also [create an Abstract Base Class by inheriting](https://docs.python.org/3/whatsnew/3.4.html#abc) from the `ABC` class of the `abc` module. This has the same effect as using the metaclass, with the small caveat that metaclass conflicts may be now hidden.
 

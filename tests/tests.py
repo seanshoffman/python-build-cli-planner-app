@@ -24,6 +24,8 @@ class DummyReminder:
     def __init__(self, *args, **kwargs):
         pass
 
+# === TASK 1 ========================================================================
+
 @pytest.mark.task_one_regular_class_exists
 def test_task_one_class_exists():
     assert hasattr(reminder, 'PoliteReminder'), \
@@ -41,6 +43,8 @@ def test_task_one_regular_class_implementation():
     assert 'please' in polite_reminder.prefix.lower(),\
         '`PoliteReminder` should initiate its parent [super()] with a polite prefix containing "please"'
 
+# === TASK 2 ========================================================================
+
 @pytest.mark.task_two_overriding_text
 def test_task_one_overriding_text():
     polite_reminder = reminder.PoliteReminder('test_string')
@@ -49,19 +53,20 @@ def test_task_one_overriding_text():
     assert polite_reminder.text == polite_reminder.prefix + 'test_string',\
         '`PoliteReminder` should prefix the passed string with your prefix'
 
+# === TASK 3 ========================================================================
 
-@pytest.mark.task_two_module_exists
-def test_task_two_module_exists():
+@pytest.mark.task_three_module_exists
+def test_task_three_module_exists():
     assert DEADLINED_REMINDERS_IMPORTED, \
         'Could not find module `deadlined_reminders`. Check the name is correct...'
 
 
-@pytest.mark.task_two_classes_exist_abstract
+@pytest.mark.abstract_classes_exist
 @pytest.mark.parametrize('class_name', [
-    'DeadlinedMetaReminder',
-    'DeadlinedReminder'
+    pytest.param('DeadlinedMetaReminder', marks=pytest.mark.task_3),
+    pytest.param('DeadlinedReminder'    , marks=pytest.mark.task_4)
 ])
-def test_task_two_classes_exist_abstract(class_name):
+def test_abstract_classes_exist(class_name):
     assert hasattr(dr, class_name), \
         f'Could not find class `{class_name}` in `deadlined_reminders.py`'
 
@@ -72,14 +77,14 @@ def test_task_two_classes_exist_abstract(class_name):
     if class_name == 'DeadlinedReminder':
         assert ABC in cls.__mro__, 'Class `DeadlinedReminder` should inherit from `ABC`'
 
-@pytest.mark.task_two_methods_exist_abstract
+@pytest.mark.abstract_methods_exist
 @pytest.mark.parametrize('class_name, method_name', [
-    ('DeadlinedMetaReminder', '__iter__'),
-    ('DeadlinedMetaReminder', 'is_due'),
-    ('DeadlinedReminder', '__iter__'),
-    ('DeadlinedReminder', 'is_due')
+    pytest.param('DeadlinedMetaReminder', '__iter__', marks=pytest.mark.task_3),
+    pytest.param('DeadlinedMetaReminder', 'is_due'  , marks=pytest.mark.task_3),
+    pytest.param('DeadlinedReminder'    , '__iter__', marks=pytest.mark.task_4),
+    pytest.param('DeadlinedReminder'    , 'is_due'  , marks=pytest.mark.task_4)
 ])
-def test_task_two_methods_exist_abstract(class_name, method_name):
+def test_abstract_methods_exist(class_name, method_name):
     cls = getattr(dr, class_name)
     assert hasattr(cls, method_name), f'Could not find `{method_name}` in `{class_name}`'
     assert method_name in cls.__abstractmethods__,\
