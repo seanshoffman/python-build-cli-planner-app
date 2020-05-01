@@ -86,7 +86,7 @@ A reminder class conforms to the protocol if it subclasses our Abstract Base Cla
 
 In the same file, add a third argument to `add_reminder` named `ReminderClass`. This will receive the desired *type* of reminder, which can be one of the previous two you have implemented, or a totally new one.
 
-Then, check for compliance. Before instantiating the `reminder = ...`, check `if issubclass(ReminderClass, DeadlinedReminder)` and raise a `TypeError` if this is not the case.
+Then, check for compliance. Before instantiating the `reminder = ...`, check `if issubclass(ReminderClass, DeadlinedReminder)` and raise a `TypeError` if this is not the case, with the message `'Invalid Reminder Class'`.
 
 Now, just below, change the variable `reminder = ...` to instantiate `ReminderClass` instead of `DateReminder`. We will assume that `ReminderClass()` constructor takes at least the same `text` and `date` parameters, and has sane defaults for the others.
 

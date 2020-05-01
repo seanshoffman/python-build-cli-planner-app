@@ -165,13 +165,15 @@ def test_app_opening_add_reminder_date():
 def test_app_opening_add_reminder_incorrect():
     # NOTE: pytest.raises(TypeError) does not work here as we want custom message
     #       for the other exceptions, which would bubble up otherwise
+    error_message = 'You should only allow conforming classes in `add_reminder`.'\
+                    ' Did you forget `issubclass()`?'
     try:
         database.add_reminder('test_reminder', '1/1/2020', DummyReminder)
+        pytest.fail(error_message)
     except TypeError as e:
-        pass
+        assert str(e) == 'Invalid Reminder Class', error_message
     except Exception:
-        pytest.fail('You should only allow conforming classes in `add_reminder`.'
-                    ' Did you forget `issubclass()`?')
+        pytest.fail(error_message)
 
 
 @pytest.mark.task_4_subclasshook
