@@ -45,22 +45,31 @@ Add the same two methods as `@abstractmethod`, namely `__iter__()` and `is_due()
 
 For convenience, in the following tasks we will use the `DeadlinedReminder` as a base class.
 
-## Task three - Implementing a class derived from an Abstract Base Class
+## Implementing a class derived from an Abstract Base Class
 
 Now that we have created our Abstract Base Class, we can create a class which implements it. An abstract base class cannot be instantiated, but when we derived a class from the ABC, it can be used to guide the implementation of the class.
 
-### Implement the class
+## Task five - Implement the `DateReminder` class
 
-In the file under `src/deadlined_reminders.py` import `parse` from `dateutil.parser`, which is a really useful third-party module for parsing dates in Python. You'll also need `datetime` from the `datetime` package.
+In the file under `src/deadlined_reminders.py` import `parse` from `dateutil.parser`, which is a really useful third-party module for parsing dates in Python.
 
-Then, create a class named `DateReminder` which derives from the `DeadlinedReminder` ABC.
-There are three methods to implement on `DateReminder`: `__init__()`, `__iter__()` and `is_due()`.
+Then, create a class named `DateReminder` which derives from the `DeadlinedReminder` ABC. Its `__init__()` metod takes a `text` and `date` parameter, alongside the usual `self`. Use the `parse()` function that you imported to store the `date` parameter onto `self`, and pass it the `dayfirst=True` keyword argument to avoid confusion for dates like `02/02/09`. Then store the `text` as it is onto the `self` object.
 
-`__init__()` takes a `text` and `date` parameter, alongside the usual `self`. Set `self.text = text`, and `self.date = parse(date)`. As your base class' `__init__()` is empty, there is no need to call it here.
+**NOTE:** As your base class' `__init__()` is empty, there is no need to call it here.
 
-The reminder will be serialized into CSV file, with each property on a column. The CSV writer expects an iterable for each row, so you should implement the `__iter__()` method to return an iterator. The iterator, in turn, would return first the reminder's `text`, then and the due date formatted to ISO8601. The easiest way to create this iterator is to use the builtin `iter([text, formatted_date])`. You can format the date using `self.date.strftime("%m/%d/%YT%H:%M:%SZ")`.
+## Task six - Implement `is_due()` on `DateReminder`
 
-For the `is_due()` method, we want to check whether `self.date` is less than or equal to `datetime.now()`.
+In the same file, import `datetime` from the `datetime` package.
+
+Your `DateReminder` is still abstract, as it does not implement all the abstract methods of the `DeadlinedReminder` ABC.
+
+Therefore, you should create the `is_due()` method on the class, thus overriding the abstract one of the base class. Inside it, you should check whether `self.date` is less than or equal to `datetime.now()`.
+
+## Task seven - Prepare `DateReminder` for serialization
+
+As we mentioned when creating the `DeadlinedReminder` metaclass, we want our subclasses to implement the `Iterable` interface which allows the serialization to CSV to be implementation-agnostic.
+
+The CSV writer expects an iterable for each row, so you should implement the `__iter__()` method to return an iterator. The iterator, in turn, would return first the reminder's `text`, then and the due date formatted to ISO8601. The easiest way to create this iterator is to use the builtin `iter([text, formatted_date])`. You can format the date using `self.date.strftime("%m/%d/%YT%H:%M:%SZ")`.
 
 ### Update the interface and database
 

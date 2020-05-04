@@ -1,10 +1,12 @@
 import pytest
 import inspect
 import re
+import random
 
 from abc import ABCMeta, ABC
 from collections.abc import Iterable
 from dateutil.parser import parse
+from datetime import datetime, timedelta
 
 from src import app
 from src import database
@@ -91,10 +93,10 @@ def test_abstract_methods_exist(class_name, method_name):
         f'Method {method_name} is not abstract in class {class_name}'
 
 
-# === TASK 5 ========================================================================
+# === TASK 5 & 6 & 7 ================================================================
 
-@pytest.mark.task_5_concrete_class_exists
-def test_task_5_concrete_class_exists():
+@pytest.mark.task_5_concrete_subclass_stub
+def test_task_5_concrete_subclass_stub():
     assert hasattr(dr, CONCRETE_CLASS_NAME), \
         f'Could not find class `{CONCRETE_CLASS_NAME}` in `deadlined_reminders.py`'
 
@@ -104,47 +106,90 @@ def test_task_5_concrete_class_exists():
     assert issubclass(cls, dr.DeadlinedReminder), \
         f'{CONCRETE_CLASS_NAME} should subclass `DeadlinedReminder`'
 
+    implemented_fcts = inspect.getmembers(cls, inspect.isfunction)
+    implemented_fct_names = [name for name, fct in implemented_fcts]
+    assert '__init__' in implemented_fct_names,\
+        f'You should implement `__init__` on {CONCRETE_CLASS_NAME}'
 
-@pytest.mark.task_5_concrete_class_no_abstract
-def test_task_5_concrete_class_no_abstract():
+    init_params = inspect.signature(cls.__init__).parameters
+    assert 'text' in init_params,\
+        f'`{CONCRETE_CLASS_NAME}.__init__()` should receive `text` as a parameter'
+    assert 'date' in init_params,\
+        f'`{CONCRETE_CLASS_NAME}.__init__()` should receive `date` as a parameter'
+
+    class DateReminder(cls):
+        def __iter__(self): pass
+        def is_due(self): pass
+
+    reminder = DateReminder('test_string', '01/01/2020')
+    assert reminder.text == 'test_string',\
+        f'Incorrect text set in {CONCRETE_CLASS_NAME}.__init__()'
+    assert reminder.date == parse('01/01/2020'),\
+        f'Incorrect date set in {CONCRETE_CLASS_NAME}.__init__(). Did you `parse()` it?'
+
+
+@pytest.mark.task_6_is_due
+def test_task_6_is_due():
+    method_name = 'is_due'
+
     cls = getattr(dr, CONCRETE_CLASS_NAME)
-    assert not cls.__abstractmethods__,\
-        f'{CONCRETE_CLASS_NAME} should implement all virtual methods'
+    assert method_name not in cls.__abstractmethods__,\
+        f'You should implement `{method_name}()` on {CONCRETE_CLASS_NAME}'
 
+    class DateReminder(cls):
+        def __iter__(self): pass
 
-@pytest.mark.task_5_methods
-@pytest.mark.parametrize('method_name', [
-    pytest.param('is_due'  , marks=pytest.mark.task_5),
-    pytest.param('__iter__', marks=pytest.mark.task_6),
-])
-def test_task_5_methods(method_name):
-    cls = getattr(dr, CONCRETE_CLASS_NAME)
-    assert hasattr(cls, method_name), f'Could not find `{method_name}` in `{CONCRETE_CLASS_NAME}`'
+    offset = random.randint(2, 100)
 
-    reminder = cls('test_string', '01/01/2020')
+    date = datetime.now().date() + timedelta(days=offset)
+    reminder = DateReminder('test_string', f'{date:%d/%m/%Y}')
     method = getattr(reminder, method_name)
     assert inspect.ismethod(method),\
-        f'{method_name} is not a method on {CONCRETE_CLASS_NAME}. Did you forget `self` ?'
+        f'`{method_name}()` is not a method on {CONCRETE_CLASS_NAME}. Did you forget `self` ?'
 
-@pytest.mark.task_5_init
-def test_task_5_init():
-    cls = getattr(dr, CONCRETE_CLASS_NAME)
-    reminder = cls('test_string', '01/01/2020')
-    assert reminder.text == 'test_string', f'Incorrect text set in {CONCRETE_CLASS_NAME}.__init__()'
-    assert reminder.date == parse('01/01/2020'), f'Incorrect date set in {CONCRETE_CLASS_NAME}.__init__()'
+    passed_date = datetime.now().date() - timedelta(days=offset)
+    passed_reminder = DateReminder('test_string', f'{passed_date:%d/%m/%Y}')
+    assert passed_reminder.is_due() is True,\
+        f'`{CONCRETE_CLASS_NAME}.is_due()` should return True for a past date'
 
-@pytest.mark.task_5_iter
-def test_task_5_iter():
-    cls = getattr(dr, CONCRETE_CLASS_NAME)
-    reminder = cls('test_string', '01/01/2020')
-    assert list(reminder) == ['test_string', '01/01/2020T00:00:00Z'],\
-        f'Incorect iterable representation of {CONCRETE_CLASS_NAME}'
+    future_date = datetime.now().date() + timedelta(days=offset)
+    future_reminder = DateReminder('test_string', f'{future_date:%d/%m/%Y}')
+    assert future_reminder.is_due() is False,\
+        f'`{CONCRETE_CLASS_NAME}.is_due()` should return False for a future date ({future_date:%d/%m/%Y})'
 
-@pytest.mark.task_5_is_due
-def test_task_5_is_due():
+
+@pytest.mark.task_7_iter
+def test_task_7_iter():
+    method_name = '__iter__'
+
     cls = getattr(dr, CONCRETE_CLASS_NAME)
-    reminder = cls('test_string', '01/01/2020')
-    assert     reminder.is_due(), f'{CONCRETE_CLASS_NAME}.is_due() returns False for a past date'
+    assert method_name not in cls.__abstractmethods__,\
+        f'You should implement `{method_name}()` on {CONCRETE_CLASS_NAME}'
+
+    # at this point we no longer need to mock it, we should be able to instantiate directly
+    assert not cls.__abstractmethods__,\
+        f'{CONCRETE_CLASS_NAME} should implement all virtual methods'
+    DateReminder = cls
+
+    offset = random.randint(2, 100)
+    date = datetime.now().date() + timedelta(days=offset)
+    date_str = f'{date:%d/%m/%Y}'
+    formatted_date = date.strftime("%m/%d/%YT%H:%M:%SZ")
+
+    reminder = DateReminder('test_string', date_str)
+    method = getattr(reminder, method_name)
+    assert inspect.ismethod(method),\
+        f'`{method_name}()` is not a method on {CONCRETE_CLASS_NAME}. Did you forget `self` ?'
+
+    serialized_reminder = list(reminder)
+    assert len(serialized_reminder) == 2,\
+        f'{CONCRETE_CLASS_NAME} should be serialized into an iterable of 2 elements'
+
+    assert serialized_reminder[0] == 'test_string',\
+        f'First element of your serialized {CONCRETE_CLASS_NAME} should be its `text`.'
+
+    assert serialized_reminder[1] == formatted_date,\
+        f'Second element of your serialized {CONCRETE_CLASS_NAME} should be _formatted_ date.'
 
     reminder = cls('test_string', '01/01/2034')
     assert not reminder.is_due(), f'{CONCRETE_CLASS_NAME}.is_due() returns True for a future date'
