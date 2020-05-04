@@ -57,8 +57,9 @@ def test_task_2_overriding_text():
 
 # === TASK 3-4 ======================================================================
 
-@pytest.mark.task_3_module_exists
-def test_task_3_module_exists():
+@pytest.mark.task_3
+@pytest.mark.task_4
+def test_deadlined_module_exists():
     assert DEADLINED_REMINDERS_IMPORTED, \
         'Could not find module `deadlined_reminders`. Check the name is correct...'
 
@@ -75,22 +76,27 @@ def test_abstract_classes_exist(class_name):
     cls = getattr(dr, class_name)
     assert inspect.isclass(cls), f'`{class_name}` is not a class'
 
+    assert inspect.isabstract(cls), f'{class_name} should be abstract'
     assert type(cls) == ABCMeta, f'{class_name} should be an Abstract Base Class'
+    assert issubclass(cls, Iterable), f'{class_name} should inherit from `collections.abc.Iterable`'
+
     if class_name == 'DeadlinedReminder':
         assert ABC in cls.__mro__, 'Class `DeadlinedReminder` should inherit from `ABC`'
 
-@pytest.mark.abstract_methods_exist
-@pytest.mark.parametrize('class_name, method_name', [
-    pytest.param('DeadlinedMetaReminder', '__iter__', marks=pytest.mark.task_3),
-    pytest.param('DeadlinedMetaReminder', 'is_due'  , marks=pytest.mark.task_3),
-    pytest.param('DeadlinedReminder'    , '__iter__', marks=pytest.mark.task_4),
-    pytest.param('DeadlinedReminder'    , 'is_due'  , marks=pytest.mark.task_4)
+
+@pytest.mark.abstract_isdue_exists
+@pytest.mark.parametrize('class_name', [
+    pytest.param('DeadlinedMetaReminder', marks=pytest.mark.task_3),
+    pytest.param('DeadlinedReminder'    , marks=pytest.mark.task_4)
 ])
-def test_abstract_methods_exist(class_name, method_name):
+def test_abstract_isdue_exists(class_name, method_name='is_due'):
     cls = getattr(dr, class_name)
     assert hasattr(cls, method_name), f'Could not find `{method_name}` in `{class_name}`'
     assert method_name in cls.__abstractmethods__,\
         f'Method {method_name} is not abstract in class {class_name}'
+
+    params = inspect.signature(cls.is_due).parameters
+    assert 'self' in params, f'`{method_name}()` should be a method. Did you forget `self`?'
 
 
 # === TASK 5 & 6 & 7 ================================================================
@@ -191,8 +197,6 @@ def test_task_7_iter():
     assert serialized_reminder[1] == formatted_date,\
         f'Second element of your serialized {CONCRETE_CLASS_NAME} should be _formatted_ date.'
 
-    reminder = cls('test_string', '01/01/2034')
-    assert not reminder.is_due(), f'{CONCRETE_CLASS_NAME}.is_due() returns True for a future date'
 
 
 @pytest.mark.task_4_correct_imports

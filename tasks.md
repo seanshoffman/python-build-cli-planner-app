@@ -25,25 +25,32 @@ In the file `src/reminder.py`, find the `__init__` method of your `PoliteReminde
 
 ## Abstract base classes
 
-Now we would like reminders to have a deadline. These can be of multiple types: on a day, at a given time, recurrent, etc. Each of these will represent their own python `class` but we want them to behave similarly, while avoiding the pitfalls of task 1. Therefore, they will inherit from an Abstract Base Class, which will enforce them to implement the required methods, namely `is_due()` and `__iter__()`, since they will need to serialize multiple fields.
+Now we would like reminders to have a deadline. These can be of multiple types: on a day, at a given time, recurrent, etc. Each of these will represent their own python `class` but we want them to behave similarly, while avoiding the pitfalls of task 1. Therefore, they will inherit from an Abstract Base Class, which will enforce them to implement two required methods:
+-  `is_due()`, which will indicate whether the deadline of a reminder has passed
+-  `__iter__()` which will allow our reminder to be serialized into a CSV file.
 
-The modern way of implementing Abstract Base Classes in Python is to use the `abc` package.
+The modern way of implementing customised Abstract Base Classes in Python is to use the `abc` module, whereas for implementing some standard interfaces it is recommended to use the `collections.abc` submodule. We will see how to emply both.
 
 ## Task three - Implementing an abstract base class using the `ABCMeta` Metaclass
 
 Create a new file under `src` and name it `deadlined_reminders.py`. In there, from the package `abc`, import `ABCMeta` and `abstractmethod`. `ABCMeta` is the Meta Class which can be used to implement our Abstract Base Class, and `abstractmethod` is a decorator, which can be used to decorate methods as abstract. Note that not all methods on an Abstract Base Class need to be abstract. However, if *none* is abstract, then the class itself is no longer abstract.
 
-Create a class named `DeadlinedMetaReminder` taking `ABCMeta` as its `metaclass` parameter. Add two methods, `__iter__()` and `is_due()`, and set the method bodies to `pass`. Mark the methods with the `@abstractmethod` decorator.
+Also import the `Iterable` abstract base class from `collections.abc`.
+
+Create a class named `DeadlinedMetaReminder` that inherits from `Iterable` and takes `ABCMeta` as its `metaclass` parameter. Add method `is_due()`, set the body to `pass` and mark it with the `@abstractmethod` decorator.
 
 ## Task four - Implementing an abstract base class by extending the `ABC` Class
 
 Note that since python 3.4 you can also [create an Abstract Base Class by inheriting](https://docs.python.org/3/whatsnew/3.4.html#abc) from the `ABC` class of the `abc` module. This has the same effect as using the metaclass, with the small caveat that metaclass conflicts may be now hidden.
 
-In the same `src/deadlined_reminders.py` file also import the `ABC` class from the `abc` module. Then create another abstract base class named `DeadlinedReminder`. This one should *inherit* from `ABC`.
+In the same `src/deadlined_reminders.py` file also import the `ABC` class from the `abc` module. Then create another abstract base class named `DeadlinedReminder`. Make it *inherit* from `ABC` instead of passing the `metaclass` parameter. Like above, it should also inherit from `Iterable`.
 
-Add the same two methods as `@abstractmethod`, namely `__iter__()` and `is_due()`.
+Then add the same `@abstractmethod` method as before, namely `is_due()`, with the body `pass`.
 
 For convenience, in the following tasks we will use the `DeadlinedReminder` as a base class.
+
+**NOTE:** Both `DeadlinedMetaReminder` and `DeadlinedReminder` have the two abstract methods we need: `__iter__()` comes from `Iterable` while `is_due()` was defined by us. Any class that extends any of them will have to implement both methods in order to be concrete.
+
 
 ## Implementing a class derived from an Abstract Base Class
 
