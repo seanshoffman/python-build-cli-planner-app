@@ -97,21 +97,21 @@ You will also have to ask the user for a date to go into your new reminder. In t
 
 At this point, your app should be able to handle reminders with text and date. If all the tests pass, feel free to play with it until you're ready for the next task.
 
-## Module four - Opening the app up to future extension
+## Opening the app up to future extension
 
 Our reminders app is almost complete. As you have worked hard on it, you would like to push one step forward in order to benefit from cool reminders that other people have implemented. However, as you like to keep organized, you want to accept only those reminders which support a due date and, of course, which can be serialized to your database. Let's see how we can do this.
 
-### Task 4.1 - Make `add_reminder()` accept a conforming reminder class
+## Task 9 - Make `add_reminder()` accept a conforming reminder class
 
 A reminder class conforms to the protocol if it subclasses our Abstract Base Class, namely `DeadlinedReminder`. In `src/database.py`, remove the imports for `DateReminder` and `PoliteReminder` and instead import `DeadlinedReminder`.
 
 In the same file, add a third argument to `add_reminder` named `ReminderClass`. This will receive the desired *type* of reminder, which can be one of the previous two you have implemented, or a totally new one.
 
-Then, check for compliance. Before instantiating the `reminder = ...`, check `if issubclass(ReminderClass, DeadlinedReminder)` and raise a `TypeError` if this is not the case, with the message `'Invalid Reminder Class'`.
+Then, check for compliance. Before instantiating the `reminder = ...`, check `if not issubclass(ReminderClass, DeadlinedReminder)` and raise a `TypeError` when this happens, with the message `'Invalid Reminder Class'`.
 
 Now, just below, change the variable `reminder = ...` to instantiate `ReminderClass` instead of `DateReminder`. We will assume that `ReminderClass()` constructor takes at least the same `text` and `date` parameters, and has sane defaults for the others.
 
-In `src/app.py`, we want to import `DateReminder` class again, and pass it to the call to `add_reminder()` within `handle_input()`.
+In `src/app.py`, we want to import `DateReminder` class, and pass it as the 3rd argument to `add_reminder()` call within `handle_input()`.
 
 Check that your app still works.
 
