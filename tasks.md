@@ -8,7 +8,7 @@ In the file `src/reminder.py` you fill find the base class `PrefixedReminder`. N
 
 In the same `src/reminder.py` file, create another class, `PoliteReminder`, which inherits from `PrefixedReminder`. Initiate its parent class by calling `super().__init__()` with a polite prefix (the prefix should contain the word *"please"*).
 
-Now, in the file `src/database.py`, import your newly created `PoliteReminder` from `reminder` module.
+Now, in the file `src/database.py`, import your newly created `PoliteReminder` from `src.reminder` module.
 
 Then find the function `add_reminder()`. It takes the string inputted by the user. Before opening the CSV file, create a `PoliteReminder` object from the `text` variable. Save it in a variable `reminder`. Then, in the call to `writerow()`, replace `text` with `reminder.text`.
 
@@ -78,22 +78,24 @@ As we mentioned when creating the `DeadlinedReminder` metaclass, we want our sub
 
 The CSV writer expects an iterable for each row, so you should implement the `__iter__()` method to return an iterator. The iterator, in turn, would return first the reminder's `text`, then and the due date formatted to ISO8601. The easiest way to create this iterator is to use the builtin `iter([text, formatted_date])`. You can format the date using `self.date.strftime("%m/%d/%YT%H:%M:%SZ")`.
 
-### Update the interface and database
+## Task eight - Update the database and the interface
 
-You will have to ask the user for a date to go into your new reminder. In the file `src/app.py`, find the line `reminder = input(...)` under the case `"2"` of `handle_input()` function. Below it, add another input for the variable `date` asking `When is that due?:`. Then pass the `date` as a second parameter to the `add_reminder()` function.
+Now that you have reminders with multiple attributes, you need to create them and add them to the database.
 
-In `src/database.py`, import the `DateReminder` class from `deadlined_reminders`.
-
+In `src/database.py`, import the `DateReminder` class from `src.deadlined_reminders`.
 
 In the same file, add a second argument to the function `add_reminder()`, naming it `date`.
 
 In the same function, change the `reminder` variable to be a new instance of `DateReminder`, instead of `PoliteReminder`. You should construct this with the `text` and `date` received as parameters.
 
-Since your reminders are now iterables, you can pass them directly to `writer.writerow()`, without the need for a list, i.e. `writer.writerow(reminder)`.
+Since your reminders are now iterables, you can pass them directly to `writer.writerow()` below, without the need for a list, i.e. `writer.writerow(reminder)`.
+
+You will also have to ask the user for a date to go into your new reminder. In the file `src/app.py`, find the line `reminder = input(...)` under the case `"2"` of `handle_input()` function. Below it, add another `input()` call for the variable `date` asking `When is that due?:`. Then pass the `date` as a second parameter to the `add_reminder()` function.
+
 
 ### Test your app
 
-Run `make test` to ensure you have correctly followed the task. If all the tests pass, feel free to play with your app until you're ready for the next task.
+At this point, your app should be able to handle reminders with text and date. If all the tests pass, feel free to play with it until you're ready for the next task.
 
 ## Module four - Opening the app up to future extension
 
