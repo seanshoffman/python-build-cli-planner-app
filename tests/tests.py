@@ -338,7 +338,7 @@ def test_app_opening_add_reminder_evening(backup_reminders_csv):
 
 # === TASK 11 ========================================================================
 
-@pytest.mark.task_5_add_reminder_isinstance
+@pytest.mark.task_11_add_reminder_isinstance
 def test_app_opening_add_reminder_isinstance():
     code_lines, starts_on = inspect.getsourcelines(database.add_reminder)
     EXISTS_LINE_WITH_issubclass = any('issubclass' in line for line in code_lines)
@@ -364,6 +364,8 @@ def test_app_opening_add_reminder_isinstance():
     assert IDX_LINE_WITH_constructor is not None \
            and IDX_LINE_WITH_constructor < IDX_LINE_WITH_isinstance,\
         'You should construct the `reminder` before checking `isinstance()`'
+
+# === TASK 12 ========================================================================
 
 @pytest.mark.task_6_polite_reminder_touchup
 def test_registration_polite_reminder():

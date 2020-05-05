@@ -101,7 +101,7 @@ At this point, your app should be able to handle reminders with text and date. I
 
 Our reminders app is almost complete. As you have worked hard on it, you would like to push one step forward in order to benefit from cool reminders that other people have implemented. However, as you like to keep organized, you want to accept only those reminders which support a due date and, of course, which can be serialized to your database. Let's see how we can do this.
 
-## Task 9 - Make `add_reminder()` accept a conforming reminder class
+## Task nine - Make `add_reminder()` accept a conforming reminder class
 
 A reminder class conforms to the protocol if it subclasses our Abstract Base Class, namely `DeadlinedReminder`. In `src/database.py`, remove the imports for `DateReminder` and `PoliteReminder` and instead import `DeadlinedReminder`.
 
@@ -109,13 +109,14 @@ In the same file, add a third argument to `add_reminder` named `ReminderClass`. 
 
 Then, check for compliance. Before instantiating the `reminder = ...`, check `if not issubclass(ReminderClass, DeadlinedReminder)` and raise a `TypeError` when this happens, with the message `'Invalid Reminder Class'`.
 
-Now, just below, change the variable `reminder = ...` to instantiate `ReminderClass` instead of `DateReminder`. We will assume that `ReminderClass()` constructor takes at least the same `text` and `date` parameters, and has sane defaults for the others.
+Now, just below, change the variable `reminder = ...` to instantiate `ReminderClass` instead of `DateReminder`. <a id='constructor-assumptions'></a>
+We will assume that `ReminderClass()` constructor takes at least the same `text` and `date` parameters, and has sane defaults for the others.
 
 In `src/app.py`, we want to import `DateReminder` class, and pass it as the 3rd argument to `add_reminder()` call within `handle_input()`.
 
 Check that your app still works.
 
-### Task 4.2 - Accept any virtual subclass
+## Task ten - Accept any virtual subclass
 
 In the file `src/external_reminders.py` you fill find a few reminder classes that are very similar to yours. Notably, there is `EveningReminder` which is always due at `8pm` on its given date. You would like to be able to add such a reminder to your database.
 
@@ -144,13 +145,13 @@ This class method is called as part of `issublcass(ReminderClass, DeadlinedRemin
 
 If you have implemented this correctly, you will see that when you run your app now the reminders that you add will have a third column indicating their time, and this should be `8pm`. The AbstractBaseClass is now recognizing `EveningReminder` as a subclass of its own because it implements the required methods.
 
-## Task five - Alternatively checking for instances of reminders
+## Task eleven - Alternatively checking for instances of reminders
 
 Alternatively, instead of using `issubclass` to check the class, we can check instances of the class using `isinstance`.
 
-In `src/database.py` move the creation of the `reminder` object above the class check. Then, since you have already instantiated the object, replace the call to `issubclass()` with `isinstance(reminder, DeadlinedReminder)`, still raising the `TypeError` when this fails.
+In `src/database.py` move the creation of the `reminder` object above the class check. Then, since you have already instantiated the object, replace the call to `issubclass()` with `isinstance(reminder, DeadlinedReminder)`, still raising the `TypeError` when this fails. Note that now you are checking `reminder` rather than `ReminderClass`.
 
-Now we are checking whether an instance of a reminder class is valid, as opposed to the class itself. What could be the advantages of this ? Think back to task 4.1 (TODO: Adapt number), where we had to make an assumption about the parameters taken by the  constructor `ReminderClass()`. Using `isinstance()` would allow our `add_reminder()` function to receive the instance directly, thus delegating its construction to a code that knows how to do it better.
+Now we are checking whether an *instance* of a `ReminderClass` class is valid, as opposed to the class itself. What could be the advantages of this ? Think back to task nine, where we had to [make an assumption](#constructor-assumptions) about the parameters taken by the constructor `ReminderClass()`. Using `isinstance()` would allow our `add_reminder()` function to receive the instance directly, thus delegating its construction to a code that knows how to do it better.
 
 ## Task six - One-time registration of a virtual subclass
 
