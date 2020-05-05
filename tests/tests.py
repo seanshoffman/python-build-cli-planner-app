@@ -265,7 +265,6 @@ def test_task_8_adding(backup_reminders_csv):
 
 # === TASK 9 ========================================================================
 
-
 @pytest.mark.task_9_correct_imports
 def test_task_9_correct_imports():
     assert not hasattr(database, 'PoliteReminder'),\
@@ -288,11 +287,12 @@ def test_task_9_add_reminder_third_parameter():
 
 
 @pytest.mark.task_9_add_reminder_date
-def test_task_9_add_reminder_date():
+def test_task_9_add_reminder_date(backup_reminders_csv):
     database.add_reminder('test_reminder', '1/1/2020', dr.DateReminder)
 
+
 @pytest.mark.task_9_add_reminder_incorrect
-def test_task_9_add_reminder_incorrect():
+def test_task_9_add_reminder_incorrect(backup_reminders_csv):
     # NOTE: pytest.raises(TypeError) does not work here as we want custom message
     #       for the other exceptions, which would bubble up otherwise
     error_message = 'You should only allow conforming classes in `add_reminder`.'\
@@ -305,8 +305,9 @@ def test_task_9_add_reminder_incorrect():
     except Exception:
         pytest.fail(error_message)
 
+# === TASK 10 ========================================================================
 
-@pytest.mark.task_4_subclasshook
+@pytest.mark.task_10_subclasshook
 def test_app_opening_subclasshook():
     DeadlinedReminder = dr.DeadlinedReminder
     assert '__subclasshook__' in DeadlinedReminder.__dict__,\
@@ -325,8 +326,8 @@ def test_app_opening_subclasshook():
         '`__subclasshook__` gives wrong result for class that '\
             ' does not respect the protocol of `DeadlinedReminder`'
 
-@pytest.mark.task_4_add_reminder_evening
-def test_app_opening_add_reminder_evening():
+@pytest.mark.task_10_add_reminder_evening
+def test_app_opening_add_reminder_evening(backup_reminders_csv):
     assert hasattr(app, 'EveningReminder'),\
         'You did not import/use `EveningReminder` in `app.py`'
 
@@ -335,6 +336,7 @@ def test_app_opening_add_reminder_evening():
     except Exception as exc:
         pytest.fail('Could not pass an `EveningReminder` to `add_reminder`')
 
+# === TASK 11 ========================================================================
 
 @pytest.mark.task_5_add_reminder_isinstance
 def test_app_opening_add_reminder_isinstance():
