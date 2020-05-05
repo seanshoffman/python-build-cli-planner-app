@@ -1,16 +1,24 @@
-from database import add_reminder, list_reminders
+from src.database import add_reminder, list_reminders
 
-def handle_input(input):
-    if(input == "1"):
+
+def handle_input():
+    choice = input("Choice: ")
+    if choice == "3":
+        return False
+
+    if(choice == "1"):
         list_reminders()
-        print_menu()
-    elif(input == "2"):
-        add_reminder()
+
+    elif(choice == "2"):
+        print()
+        reminder = input("What would you like to be reminded about?: ")
+
+        add_reminder(reminder)
         list_reminders()
-        print_menu()
     else:
         print("Invalid menu option")
-        print_menu()
+
+    return True
 
 def print_menu():
     print()
@@ -24,10 +32,12 @@ def print_menu():
     print()
     print('1) List reminders')
     print('2) Add a reminder')
-    choice = input("Choice: ")
-    handle_input(choice)
+    print('3) Exit')
 
 def main():
     print_menu()
+    while handle_input():
+        print_menu()
 
-main()
+if __name__ == '__main__':
+    main()

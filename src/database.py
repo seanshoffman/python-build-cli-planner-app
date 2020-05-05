@@ -12,14 +12,8 @@ def list_reminders():
                 print(e.ljust(32), end=' ')
         print()
 
-<<<<<<< HEAD
-def add_reminder():
-=======
-def add_reminder(reminder):
->>>>>>> 953bcebd1437acfa83993b25cca4faf463989db8
-    print()
-    reminder = input("What would you like to be reminded about?: ")
-    
+def add_reminder(text):
+
     with open('reminders.csv', 'a+', newline='\n') as file:
         writer = csv.writer(file)
-        writer.writerow([reminder])
+        writer.writerow([text])
