@@ -367,7 +367,7 @@ def test_app_opening_add_reminder_isinstance():
 
 # === TASK 12 ========================================================================
 
-@pytest.mark.task_6_polite_reminder_touchup
+@pytest.mark.task_12_polite_reminder_touchup
 def test_registration_polite_reminder():
     PoliteReminder = reminder.PoliteReminder
     assert hasattr(PoliteReminder, '__iter__'),\
@@ -375,10 +375,10 @@ def test_registration_polite_reminder():
 
     init_params = inspect.signature(PoliteReminder.__init__).parameters
     assert init_params.keys() == {'self', 'text', 'date'},\
-        'In the last task PoliteReminder init should also take `date` parameter'
+        'In the last task PoliteReminder.__init__() should also take `date` parameter'
 
     assert init_params['date'].default is None,\
-        'The `date` parameter of PoliteReminder.__init__ should be `None`'
+        'The `date` parameter of PoliteReminder.__init__() should be `None`'
 
     pr = PoliteReminder('test', '1/1/2020')
     polite_reminder_iter = list(pr.__iter__())
@@ -389,7 +389,7 @@ def test_registration_polite_reminder():
         '`PoliteReminder.__iter__()` should return only one item in the list'
 
 
-@pytest.mark.task_6_registration
+@pytest.mark.task_12_registration
 def test_registration_works():
     assert hasattr(app, 'PoliteReminder'),\
         'You should import `PoliteReminder` in `app.py`'

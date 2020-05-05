@@ -153,17 +153,19 @@ In `src/database.py` move the creation of the `reminder` object above the class 
 
 Now we are checking whether an *instance* of a `ReminderClass` class is valid, as opposed to the class itself. What could be the advantages of this ? Think back to task nine, where we had to [make an assumption](#constructor-assumptions) about the parameters taken by the constructor `ReminderClass()`. Using `isinstance()` would allow our `add_reminder()` function to receive the instance directly, thus delegating its construction to a code that knows how to do it better.
 
-## Task six - One-time registration of a virtual subclass
+## Task twelve - One-time registration of a virtual subclass
 
 > **If it quaks like a duck**
 
-Before you finish off this project, you realize that back in task one you did some work that you can no longer use. Since `PoliteReminder` class it *not* implementing the prototype of `DeadlinedReminder`, passing it to `add_reminder()` would result in an error. However, the `is_due()` method of your protocol is not used anywhere yet, so you would be willing to give up the requirement of having a deadline on a reminder, as long as it asks you nicely not to remember the item.
+Before you finish off this project, you realize that back in task one you did some work that you can no longer use. Since `PoliteReminder` class it *not* implementing the prototype of `DeadlinedReminder`, passing it to `add_reminder()` would result in an error. However, the `is_due()` method of your protocol is not used anywhere yet, so you would be willing to give up the requirement of having a deadline on a reminder, as long as it asks you nicely to remember the item.
 
-Let's see how you can make `PoliteReminder` play nicely with `add_reminder()`, without downgrading the protocol. For this, we will benefit from Python's duck-typing, which allows you to use an object as long as it has the methods you need. (*If it quacks like a duck, and it walks like a duck, then it is a duck*)
+Let's see how you can make `PoliteReminder` play together with `add_reminder()`, without downgrading the protocol. For this, we will benefit from Python's duck-typing, which allows you to use an object as long as it has the methods you need. (*If it quacks like a duck, and it walks like a duck, then it is a duck*)
 
 Of the two methods of our protocol, the only method we use so far is `__iter__()`. So, in the file `src/reminder.py`, add the `__iter()__` method on `PoliteReminder` class, making it return an iterator through a list of 1 element, `[self.text]`.
 
-Modify also the `__init__()` method to take a `date` parameter, with a default value `None`. This makes it compatible with other constructors. You do not have to use `date` in the body.
+**NOTE:** We do not necessarily have to inherit from `collections.abc.Iterable` in order to make our `PoliteReminder` class behave like one. It suffices to implement the interface, namely the `__iter__()` method, for the class to be recognised as an `Iterable`. Behind the scenes, `Iterable` uses the same mechanism of `__subclasshook__()` like you have implemented in task ten, but it is only checking for this one method.
+
+Now modify also the `__init__()` method to take a `date` parameter, with a default value `None`. This makes it compatible with other constructors. You do not have to use `date` in the body.
 
 In `src/app.py` import the class `PoliteReminder` and add the base class `DeadlinedReminder` to the imports from `deadlined_reminders`. Then, at module level, you need instruct `DeadlinedReminder` to consider `PoliterReminder` as a subclass. You can do this through the `register()` method, which is available thanks to the inheritance from `ABC`/`ABCMeta`:
 ```python
