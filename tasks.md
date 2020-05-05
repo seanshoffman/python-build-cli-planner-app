@@ -13,9 +13,9 @@ Now, in the file `src/database.py`, import your newly created `PoliteReminder` f
 Then find the function `add_reminder()`. It takes the string inputted by the user. Before opening the CSV file, create a `PoliteReminder` object from the `text` variable. Save it in a variable `reminder`. Then, in the call to `writerow()`, replace `text` with `reminder.text`.
 
 ### Intermediate test
-Run `make` in the root directory and add some reminders. You should notice that all of them consist of your prefix string and some placeholder text, forgetting your input.
+Test your app (see Readme) and add some reminders. You should notice that all of them consist of your prefix string and some placeholder text, forgetting your input.
 
-This is the disadvantage of inheriting from a normal class: although its docstring specified that children should override a property or a method, it cannot enforce them to do so. In the next module we will see how to fix this, but first, let's fix the app.
+This is the *disadvantage* of inheriting from a normal class: although its docstring specified that children should override a property or a method, it cannot enforce them to do so. In the next task we will see how to fix this, but first, let's fix the app.
 
 ## Task two - Overriding properties from base class
 
@@ -29,7 +29,7 @@ Now we would like reminders to have a deadline. These can be of multiple types: 
 -  `is_due()`, which will indicate whether the deadline of a reminder has passed
 -  `__iter__()` which will allow our reminder to be serialized into a CSV file.
 
-The modern way of implementing customised Abstract Base Classes in Python is to use the `abc` module, whereas for implementing some standard interfaces it is recommended to use the `collections.abc` submodule. We will see how to emply both.
+The modern way of implementing customised Abstract Base Classes in Python is to use the `abc` module, whereas for implementing some standard interfaces it is recommended to use the `collections.abc` submodule. We will see how to employ both.
 
 ## Task three - Implementing an abstract base class using the `ABCMeta` Metaclass
 
@@ -60,7 +60,7 @@ Now that we have created our Abstract Base Class, we can create a class which im
 
 In the file under `src/deadlined_reminders.py` import `parse` from `dateutil.parser`, which is a really useful third-party module for parsing dates in Python.
 
-Then, create a class named `DateReminder` which derives from the `DeadlinedReminder` ABC. Its `__init__()` metod takes a `text` and `date` parameter, alongside the usual `self`. Use the `parse()` function that you imported to store the `date` parameter onto `self`, and pass it the `dayfirst=True` keyword argument to avoid confusion for dates like `02/02/09`. Then store the `text` as it is onto the `self` object.
+Then, create a class named `DateReminder` which derives from the `DeadlinedReminder` ABC. Its `__init__()` method takes a `text` and `date` parameter, alongside the usual `self`. Use the `parse()` function that you imported to store the `date` parameter onto `self`, and pass it the `dayfirst=True` keyword argument to avoid confusion for dates like `02/02/09`. Then store the `text` as it is onto the `self` object.
 
 **NOTE:** As your base class' `__init__()` is empty, there is no need to call it here.
 
@@ -141,7 +141,7 @@ def __subclasshook__(cls, subclass):
     return True
 ```
 
-This class method is called as part of `issublcass(ReminderClass, DeadlinedReminder)`. It checks that the given `subclass` contains the required methods `__iter__()` and `is_due()` anywhere in its hierarchy. If they are present, the class is considered to be a virtual subclass of `DeadlinedReminder`.
+This class method is called as part of `issubclass(ReminderClass, DeadlinedReminder)`. It checks that the given `subclass` contains the required methods `__iter__()` and `is_due()` anywhere in its hierarchy. If they are present, the class is considered to be a virtual subclass of `DeadlinedReminder`.
 
 If you have implemented this correctly, you will see that when you run your app now the reminders that you add will have a third column indicating their time, and this should be `8pm`. The AbstractBaseClass is now recognizing `EveningReminder` as a subclass of its own because it implements the required methods.
 
@@ -155,7 +155,7 @@ Now we are checking whether an *instance* of a `ReminderClass` class is valid, a
 
 ## Task twelve - One-time registration of a virtual subclass
 
-> **If it quaks like a duck**
+> **If it quacks like a duck**
 
 Before you finish off this project, you realize that back in task one you did some work that you can no longer use. Since `PoliteReminder` class it *not* implementing the prototype of `DeadlinedReminder`, passing it to `add_reminder()` would result in an error. However, the `is_due()` method of your protocol is not used anywhere yet, so you would be willing to give up the requirement of having a deadline on a reminder, as long as it asks you nicely to remember the item.
 
@@ -167,7 +167,7 @@ Of the two methods of our protocol, the only method we use so far is `__iter__()
 
 Now modify also the `__init__()` method to take a `date` parameter, with a default value `None`. This makes it compatible with other constructors. You do not have to use `date` in the body.
 
-In `src/app.py` import the class `PoliteReminder` and add the base class `DeadlinedReminder` to the imports from `deadlined_reminders`. Then, at module level, you need instruct `DeadlinedReminder` to consider `PoliterReminder` as a subclass. You can do this through the `register()` method, which is available thanks to the inheritance from `ABC`/`ABCMeta`:
+In `src/app.py` import the class `PoliteReminder` and add the base class `DeadlinedReminder` to the imports from `deadlined_reminders`. Then, at module level, you need instruct `DeadlinedReminder` to consider `PoliteReminder` as a subclass. You can do this through the `register()` method, which is available thanks to the inheritance from `ABC`/`ABCMeta`:
 ```python
 DeadlinedReminder.register(PoliteReminder)
 ```
