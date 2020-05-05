@@ -242,7 +242,7 @@ def test_task_8_signature():
 def test_task_8_adding(backup_reminders_csv):
     # the following only applies before extending add_reminder with a class
     add_reminder_params = inspect.signature(database.add_reminder).parameters
-    if len(add_reminder_params) != 2:
+    if len(add_reminder_params) > 2:
         return
 
     try:
