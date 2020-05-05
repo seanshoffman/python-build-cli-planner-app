@@ -2,8 +2,9 @@
 consider as "external", whose source we do not control.
 """
 from dateutil.parser import parse
+from collections.abc import Iterable
 
-class DateTimeReminder:
+class DateTimeReminder(Iterable):
     """A reminder which has a specific date and time for being due"""
     def __init__(self, text: str, date: str, time: str = '9am'):
         self.text = text

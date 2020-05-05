@@ -183,7 +183,7 @@ def test_task_7_iter():
     offset = random.randint(3, 100)
     date = datetime.now() + timedelta(days=offset)
     date_str = f'{date:%d/%m/%Y}'
-    formatted_date = parse(date_str).isoformat()
+    formatted_date = parse(date_str, dayfirst=True).isoformat()
 
     reminder = DateReminder('test_string', date_str)
     method = getattr(reminder, method_name)
