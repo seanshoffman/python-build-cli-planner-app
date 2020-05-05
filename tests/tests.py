@@ -260,7 +260,7 @@ def test_task_8_adding(backup_reminders_csv):
         else:
             assert row[0] == 'test_string',\
                 'database.add_reminder() did not serialize text correctly. Check your DateReminder text'
-            assert row[1] == '02/01/2020T00:00:00Z',\
+            assert row[1] == '2020-02-01T00:00:00',\
                 'database.add_reminder() did not serialize date correctly. Check your DateReminder date'
 
 # === TASK 9 ========================================================================
