@@ -29,6 +29,28 @@ class DummyReminder:
     def __init__(self, *args, **kwargs):
         pass
 
+
+@pytest.fixture
+def backup_reminders_csv():
+    # setup
+    src_path = Path('reminders.csv')
+    dst_path = Path('reminders.csv.bk')
+
+    src_existed = False
+    if src_path.exists():
+        src_existed = True
+        shutil.copy2(src_path, dst_path)
+
+    # start the test
+    yield None
+
+    # teardown
+    if src_existed:
+        shutil.move(dst_path, src_path)
+    else:
+        src_path.unlink()
+
+
 # === TASK 1 ========================================================================
 
 @pytest.mark.task_1_regular_class_exists
@@ -203,61 +225,43 @@ def test_task_7_iter():
 
 # === TASK 8 ========================================================================
 
-@pytest.mark.task_8_database
-class TestTask8:
-    @classmethod
-    def setup_class(cls):
-        cls.add_reminder_params = inspect.signature(database.add_reminder).parameters
-        cls.src_path = Path('reminders.csv')
-        cls.dst_path = Path('reminders.csv.bk')
-        cls.src_existed = False
+@pytest.mark.task_8_signature
+def test_task_8_signature():
+    add_reminder_params = inspect.signature(database.add_reminder).parameters
+    assert len(add_reminder_params) >= 2,\
+        '`database.add_reminder()` should take two parameters'
 
-        if len(cls.add_reminder_params) == 2:
-            if cls.src_path.exists():
-                cls.src_existed = True
-                shutil.copy2(cls.src_path, cls.dst_path)
+    assert 'text' == list(add_reminder_params)[0],\
+        '`database.add_reminder() should still take the `text` as first parameter'
+    assert 'date' == list(add_reminder_params)[1],\
+        '`database.add_reminder() should take the `date` as second parameter'
+    assert add_reminder_params['date'].default is inspect.Parameter.empty,\
+        '`date` should not have a default value in `database.add_reminder()`'
 
-    @classmethod
-    def teardown_class(cls):
-        if len(cls.add_reminder_params) == 2:
-            if cls.src_existed:
-                shutil.move(cls.dst_path, cls.src_path)
-            else:
-                cls.src_path.unlink()
+@pytest.mark.task_8_adding
+def test_task_8_adding(backup_reminders_csv):
+    # the following only applies before extending add_reminder with a class
+    add_reminder_params = inspect.signature(database.add_reminder).parameters
+    if len(add_reminder_params) != 2:
+        return
 
-    def test_task_8_signature(self):
-        assert len(self.add_reminder_params) >= 2,\
-            '`database.add_reminder()` should take two parameters'
-
-        assert 'text' == list(self.add_reminder_params)[0],\
-            '`database.add_reminder() should still take the `text` as first parameter'
-        assert 'date' == list(self.add_reminder_params)[1],\
-            '`database.add_reminder() should take the `date` as second parameter'
-        assert self.add_reminder_params['date'].default is inspect.Parameter.empty,\
-            '`date` should not have a default value in `database.add_reminder()`'
-
-    def test_task_8_adding(self):
-        # the following only applies before extending add_reminder with a class
-        if len(self.add_reminder_params) != 2:
-            return
-
+    try:
+        database.add_reminder('test_string', '1/2/2020')
+    except Exception as ex:
+        pytest.fail(f'Could not add reminder with text and date. Error: {ex}')
+    else:
+        with open('reminders.csv', 'r') as f:
+            lines = f.readlines()
+        reader = csv.reader(lines[-1:])
         try:
-            database.add_reminder('test_string', '1/2/2020')
-        except Exception as ex:
-            pytest.fail(f'Could not add reminder with text and date. Error: {ex}')
+            row = next(reader)
+        except StopIteration:
+            pytest.fail('database.add_reminder() had no effect')
         else:
-            with open('reminders.csv', 'r') as f:
-                lines = f.readlines()
-            reader = csv.reader(lines[-1:])
-            try:
-                row = next(reader)
-            except StopIteration:
-                pytest.fail('database.add_reminder() had no effect')
-            else:
-                assert row[0] == 'test_string',\
-                    'database.add_reminder() did not serialize text correctly. Check your DateReminder text'
-                assert row[1] == '02/01/2020T00:00:00Z',\
-                    'database.add_reminder() did not serialize date correctly. Check your DateReminder date'
+            assert row[0] == 'test_string',\
+                'database.add_reminder() did not serialize text correctly. Check your DateReminder text'
+            assert row[1] == '02/01/2020T00:00:00Z',\
+                'database.add_reminder() did not serialize date correctly. Check your DateReminder date'
 
 # === TASK 9 ========================================================================
 
