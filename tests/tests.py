@@ -148,20 +148,20 @@ def test_task_6_is_due():
     class DateReminder(cls):
         def __iter__(self): pass
 
-    offset = random.randint(2, 100)
+    offset = random.randint(3, 100)
 
-    date = datetime.now().date() + timedelta(days=offset)
+    date = datetime.now() + timedelta(days=offset)
     reminder = DateReminder('test_string', f'{date:%d/%m/%Y}')
     method = getattr(reminder, method_name)
     assert inspect.ismethod(method),\
         f'`{method_name}()` is not a method on {CONCRETE_CLASS_NAME}. Did you forget `self` ?'
 
-    passed_date = datetime.now().date() - timedelta(days=offset)
+    passed_date = datetime.now() - timedelta(days=offset)
     passed_reminder = DateReminder('test_string', f'{passed_date:%d/%m/%Y}')
     assert passed_reminder.is_due() is True,\
         f'`{CONCRETE_CLASS_NAME}.is_due()` should return True for a past date'
 
-    future_date = datetime.now().date() + timedelta(days=offset)
+    future_date = datetime.now() + timedelta(days=offset)
     future_reminder = DateReminder('test_string', f'{future_date:%d/%m/%Y}')
     assert future_reminder.is_due() is False,\
         f'`{CONCRETE_CLASS_NAME}.is_due()` should return False for a future date ({future_date:%d/%m/%Y})'
@@ -180,10 +180,10 @@ def test_task_7_iter():
         f'{CONCRETE_CLASS_NAME} should implement all virtual methods'
     DateReminder = cls
 
-    offset = random.randint(2, 100)
-    date = datetime.now().date() + timedelta(days=offset)
+    offset = random.randint(3, 100)
+    date = datetime.now() + timedelta(days=offset)
     date_str = f'{date:%d/%m/%Y}'
-    formatted_date = date.strftime("%m/%d/%YT%H:%M:%SZ")
+    formatted_date = parse(date_str).isoformat()
 
     reminder = DateReminder('test_string', date_str)
     method = getattr(reminder, method_name)

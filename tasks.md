@@ -76,7 +76,7 @@ Therefore, you should create the `is_due()` method on the class, thus overriding
 
 As we mentioned when creating the `DeadlinedReminder` metaclass, we want our subclasses to implement the `Iterable` interface which allows the serialization to CSV to be implementation-agnostic.
 
-The CSV writer expects an iterable for each row, so you should implement the `__iter__()` method to return an iterator. The iterator, in turn, would return first the reminder's `text`, then and the due date formatted to ISO8601. The easiest way to create this iterator is to use the builtin `iter([text, formatted_date])`. You can format the date using `self.date.strftime("%m/%d/%YT%H:%M:%SZ")`.
+The CSV writer expects an iterable for each row, so you should implement the `__iter__()` method to return an iterator. The iterator, in turn, would return first the reminder's `text`, then and the due date formatted to ISO8601. The easiest way to create this iterator is to use the builtin `iter([text, formatted_date])`. You can format the date using `self.date.isoformat()`.
 
 ## Task eight - Update the database and the interface
 
