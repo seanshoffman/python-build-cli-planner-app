@@ -6,7 +6,7 @@ We are not happy with the bland text of the reminders and we'd like them to have
 
 In the file `src/reminder.py` you fill find the base class `PrefixedReminder`. Note its docstring.
 
-In the same `src/reminder.py` file, create another class, `PoliteReminder`, which inherits from `PrefixedReminder`. Initiate its parent class by calling `super().__init__()` with a polite prefix (the prefix should contain the word *"please"*).
+In the same `src/reminder.py` file, create another class, `PoliteReminder`, which inherits from `PrefixedReminder`. Its `__init__()` should accept a `text` parameter; for now you don't need to use it. Initiate the parent class by calling `super().__init__()` with a polite prefix (the prefix should contain the word *"please"*).
 
 Now, in the file `src/database.py`, import your newly created `PoliteReminder` from `src.reminder` module.
 
