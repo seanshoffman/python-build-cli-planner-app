@@ -52,4 +52,4 @@ As you progress through the tasks you can re-run the above command to check the 
 
 ## Previewing Your Work
 
-Start playing with your app by running `python src/app.py`. Try adding a couple of reminders such as `Drink water` and `Complete the Reminders project`.  :)
+Start playing with your app by running `python app.py`. Try adding a couple of reminders such as `Drink water` and `Complete the Reminders project`.  :)

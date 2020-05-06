@@ -90,7 +90,7 @@ In the same function, change the `reminder` variable to be a new instance of `Da
 
 Since your reminders are now iterables, you can pass them directly to `writer.writerow()` below, without the need for a list, i.e. `writer.writerow(reminder)`.
 
-You will also have to ask the user for a date to go into your new reminder. In the file `src/app.py`, find the line `reminder = input(...)` under the case `"2"` of `handle_input()` function. Below it, add another `input()` call for the variable `date` asking `When is that due?:`. Then pass the `date` as a second parameter to the `add_reminder()` function.
+You will also have to ask the user for a date to go into your new reminder. In the file `app.py`, find the line `reminder = input(...)` under the case `"2"` of `handle_input()` function. Below it, add another `input()` call for the variable `date` asking `When is that due?:`. Then pass the `date` as a second parameter to the `add_reminder()` function.
 
 
 ### Test your app
@@ -112,7 +112,7 @@ Then, check for compliance. Before instantiating the `reminder = ...`, check `if
 Now, just below, change the variable `reminder = ...` to instantiate `ReminderClass` instead of `DateReminder`. <a id='constructor-assumptions'></a>
 We will assume that `ReminderClass()` constructor takes at least the same `text` and `date` parameters, and has sane defaults for the others.
 
-In `src/app.py`, we want to import `DateReminder` class, and pass it as the 3rd argument to `add_reminder()` call within `handle_input()`.
+In `app.py`, we want to import `DateReminder` class, and pass it as the 3rd argument to `add_reminder()` call within `handle_input()`.
 
 Check that your app still works.
 
@@ -120,7 +120,7 @@ Check that your app still works.
 
 In the file `src/external_reminders.py` you fill find a few reminder classes that are very similar to yours. Notably, there is `EveningReminder` which is always due at `8pm` on its given date. You would like to be able to add such a reminder to your database.
 
-In the file `src/app.py` import `EveningReminder` from `external_reminders`. Then, change the call to `add_reminder()` to pass `EveningReminder` instead of `DateReminder`. Don't forget that you are passing the class, not an object.
+In the file `app.py` import `EveningReminder` from `external_reminders`. Then, change the call to `add_reminder()` to pass `EveningReminder` instead of `DateReminder`. Don't forget that you are passing the class, not an object.
 
 If you play with your app at this point and try to add a reminder, you will notice that it no longer works. The protocol check that you have implemented above is not recognizing `EveningReminder` as a subclass of `DeadlinedReminder`. And, since it is external, you cannot make it inherit from your Abstract Base Class `DeadlinedReminder`. However, you notice that it *does* implement your protocol, defining the `__iter__()` and `is_due()` methods, which makes it a *virtual* subclass. Let's make `DeadlinedReminder` detect this.
 
@@ -167,7 +167,7 @@ Of the two methods of our protocol, the only method we use so far is `__iter__()
 
 Now modify also the `__init__()` method to take a `date` parameter, with a default value `None`. This makes it compatible with other constructors. You do not have to use `date` in the body.
 
-In `src/app.py` import the class `PoliteReminder` and add the base class `DeadlinedReminder` to the imports from `deadlined_reminders`. Then, at module level, you need instruct `DeadlinedReminder` to consider `PoliteReminder` as a subclass. You can do this through the `register()` method, which is available thanks to the inheritance from `ABC`/`ABCMeta`:
+In `app.py` import the class `PoliteReminder` and add the base class `DeadlinedReminder` to the imports from `deadlined_reminders`. Then, at module level, you need instruct `DeadlinedReminder` to consider `PoliteReminder` as a subclass. You can do this through the `register()` method, which is available thanks to the inheritance from `ABC`/`ABCMeta`:
 ```python
 DeadlinedReminder.register(PoliteReminder)
 ```
