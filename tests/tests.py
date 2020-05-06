@@ -11,7 +11,7 @@ from dateutil.parser import parse
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from src import app
+import app
 from src import database
 from src import reminder
 try:

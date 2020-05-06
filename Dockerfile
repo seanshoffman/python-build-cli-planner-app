@@ -7,5 +7,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-ENV PYTHONPATH "${PYTHONPATH}:/app/src"
-CMD ["python", "/app/src/app.py"]
+CMD ["python", "/app/app.py"]
