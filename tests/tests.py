@@ -371,8 +371,8 @@ def test_app_opening_add_reminder_isinstance():
 
 # === TASK 12 ========================================================================
 
-@pytest.mark.task_12_polite_reminder_touchup
-def test_registration_polite_reminder():
+@pytest.mark.task_12_register_polite_reminder
+def test_task_12_register_polite_reminder():
     PoliteReminder = reminder.PoliteReminder
     assert hasattr(PoliteReminder, '__iter__'),\
         'You should add `__iter__` on PoliteReminder'
@@ -392,9 +392,7 @@ def test_registration_polite_reminder():
     assert len(polite_reminder_iter) == 1,\
         '`PoliteReminder.__iter__()` should return only one item in the list'
 
-
-@pytest.mark.task_12_registration
-def test_registration_works():
+    # --- task_12_registration ------------------------------------------
     assert hasattr(app, 'PoliteReminder'),\
         'You should import `PoliteReminder` in `app.py`'
 
