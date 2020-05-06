@@ -313,7 +313,7 @@ def test_task_9_accept_class(backup_reminders_csv):
 # === TASK 10 ========================================================================
 
 @pytest.mark.task_10_subclasshook
-def test_app_opening_subclasshook():
+def test_app_opening_subclasshook(backup_reminders_csv):
     DeadlinedReminder = dr.DeadlinedReminder
     assert '__subclasshook__' in DeadlinedReminder.__dict__,\
         'Could not find `__subclasshook__` onto `DeadlinedReminder`'
@@ -331,8 +331,7 @@ def test_app_opening_subclasshook():
         '`__subclasshook__` gives wrong result for class that '\
             ' does not respect the protocol of `DeadlinedReminder`'
 
-@pytest.mark.task_10_add_reminder_evening
-def test_app_opening_add_reminder_evening(backup_reminders_csv):
+    # --- task_10_add_reminder_evening ---------------------------------
     assert hasattr(app, 'EveningReminder'),\
         'You did not import/use `EveningReminder` in `app.py`'
 
