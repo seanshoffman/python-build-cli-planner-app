@@ -24,6 +24,7 @@ from src.external_reminders import EveningReminder
 
 # This is for generality of task of implementation the concrete class
 CONCRETE_CLASS_NAME = 'DateReminder'
+ABSTRACT_METHOD_NAME = 'is_due'
 
 class DummyReminder:
     def __init__(self, *args, **kwargs):
@@ -80,19 +81,13 @@ def test_task_2_overriding_text():
 
 # === TASK 3-4 ======================================================================
 
-@pytest.mark.task_3
-@pytest.mark.task_4
-def test_deadlined_module_exists():
+@pytest.mark.task_3_DeadlinedMetaReminder
+def test_task_3_DeadlinedMetaReminder():
     assert DEADLINED_REMINDERS_IMPORTED, \
         'Could not find module `deadlined_reminders`. Check the name is correct...'
 
-
-@pytest.mark.abstract_classes_exist
-@pytest.mark.parametrize('class_name', [
-    pytest.param('DeadlinedMetaReminder', marks=pytest.mark.task_3),
-    pytest.param('DeadlinedReminder'    , marks=pytest.mark.task_4)
-])
-def test_abstract_classes_exist(class_name):
+    # this is a vestige of parametrized tests
+    class_name = 'DeadlinedMetaReminder'
     assert hasattr(dr, class_name), \
         f'Could not find class `{class_name}` in `deadlined_reminders.py`'
 
@@ -103,23 +98,44 @@ def test_abstract_classes_exist(class_name):
     assert type(cls) == ABCMeta, f'{class_name} should be an Abstract Base Class'
     assert issubclass(cls, Iterable), f'{class_name} should inherit from `collections.abc.Iterable`'
 
-    if class_name == 'DeadlinedReminder':
-        assert ABC in cls.__mro__, 'Class `DeadlinedReminder` should inherit from `ABC`'
-
-
-@pytest.mark.abstract_isdue_exists
-@pytest.mark.parametrize('class_name', [
-    pytest.param('DeadlinedMetaReminder', marks=pytest.mark.task_3),
-    pytest.param('DeadlinedReminder'    , marks=pytest.mark.task_4)
-])
-def test_abstract_isdue_exists(class_name, method_name='is_due'):
-    cls = getattr(dr, class_name)
-    assert hasattr(cls, method_name), f'Could not find `{method_name}` in `{class_name}`'
-    assert method_name in cls.__abstractmethods__,\
-        f'Method {method_name} is not abstract in class {class_name}'
+    # --- CHECK METHOD ----------------------------
+    assert hasattr(cls, ABSTRACT_METHOD_NAME),\
+         f'Could not find `{ABSTRACT_METHOD_NAME}` in `{class_name}`'
+    assert ABSTRACT_METHOD_NAME in cls.__abstractmethods__,\
+        f'Method {ABSTRACT_METHOD_NAME} is not abstract in class {class_name}'
 
     params = inspect.signature(cls.is_due).parameters
-    assert 'self' in params, f'`{method_name}()` should be a method. Did you forget `self`?'
+    assert 'self' in params,\
+        f'`{ABSTRACT_METHOD_NAME}()` should be a method. Did you forget `self`?'
+
+
+@pytest.mark.task_4_DeadlinedReminder
+def test_abstract_classes_exist():
+    assert DEADLINED_REMINDERS_IMPORTED, \
+        'Could not find module `deadlined_reminders`. Check the name is correct...'
+
+    class_name = 'DeadlinedReminder'
+    assert hasattr(dr, class_name), \
+        f'Could not find class `{class_name}` in `deadlined_reminders.py`'
+
+    cls = getattr(dr, class_name)
+    assert inspect.isclass(cls), f'`{class_name}` is not a class'
+
+    assert inspect.isabstract(cls), f'{class_name} should be abstract'
+    assert type(cls) == ABCMeta, f'{class_name} should be an Abstract Base Class'
+    assert issubclass(cls, Iterable), f'{class_name} should inherit from `collections.abc.Iterable`'
+
+    assert ABC in cls.__mro__, 'Class `DeadlinedReminder` should inherit from `ABC`'
+
+    # --- CHECK METHOD ----------------------------
+    assert hasattr(cls, ABSTRACT_METHOD_NAME),\
+         f'Could not find `{ABSTRACT_METHOD_NAME}` in `{class_name}`'
+    assert ABSTRACT_METHOD_NAME in cls.__abstractmethods__,\
+        f'Method {ABSTRACT_METHOD_NAME} is not abstract in class {class_name}'
+
+    params = inspect.signature(cls.is_due).parameters
+    assert 'self' in params,\
+        f'`{ABSTRACT_METHOD_NAME}()` should be a method. Did you forget `self`?'
 
 
 # === TASK 5 & 6 & 7 ================================================================
