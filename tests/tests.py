@@ -239,8 +239,8 @@ def test_task_7_iter():
 
 # === TASK 8 ========================================================================
 
-@pytest.mark.task_8_signature
-def test_task_8_signature():
+@pytest.mark.task_8_update_interface
+def test_task_8_update_interface(backup_reminders_csv):
     add_reminder_params = inspect.signature(database.add_reminder).parameters
     assert len(add_reminder_params) >= 2,\
         '`database.add_reminder()` should take two parameters'
@@ -252,10 +252,6 @@ def test_task_8_signature():
     assert add_reminder_params['date'].default is inspect.Parameter.empty,\
         '`date` should not have a default value in `database.add_reminder()`'
 
-@pytest.mark.task_8_adding
-def test_task_8_adding(backup_reminders_csv):
-    # the following only applies before extending add_reminder with a class
-    add_reminder_params = inspect.signature(database.add_reminder).parameters
     if len(add_reminder_params) > 2:
         return
 
