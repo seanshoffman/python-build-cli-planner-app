@@ -53,8 +53,8 @@ def backup_reminders_csv():
 
 # === TASK 1 ========================================================================
 
-@pytest.mark.task_1_regular_class_exists
-def test_task_1_regular_class_exists():
+@pytest.mark.task_1_regular_class_implementation
+def test_task_1_regular_class_implementation():
     assert hasattr(reminder, 'PoliteReminder'), \
         'You should implement class `PoliteReminder` in reminder.py'
     assert inspect.isclass(reminder.PoliteReminder), \
@@ -62,8 +62,6 @@ def test_task_1_regular_class_exists():
     assert issubclass(reminder.PoliteReminder, reminder.PrefixedReminder), \
         '`PoliteReminder` should inherit from `PrefixedReminder`'
 
-@pytest.mark.task_1_regular_class_implementation
-def test_task_1_regular_class_implementation():
     polite_reminder = reminder.PoliteReminder('test_string')
     assert hasattr(polite_reminder, 'prefix'), \
         'No `prefix` property on `PoliteReminder`. Did you inherit from `PrefixedReminder`?'
