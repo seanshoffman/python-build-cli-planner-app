@@ -110,7 +110,7 @@ def test_task_3_DeadlinedMetaReminder():
 
 
 @pytest.mark.task_4_DeadlinedReminder
-def test_abstract_classes_exist():
+def test_task_4_DeadlinedReminder():
     assert DEADLINED_REMINDERS_IMPORTED, \
         'Could not find module `deadlined_reminders`. Check the name is correct...'
 
@@ -275,8 +275,9 @@ def test_task_8_update_interface(backup_reminders_csv):
 
 # === TASK 9 ========================================================================
 
-@pytest.mark.task_9_correct_imports
-def test_task_9_correct_imports():
+@pytest.mark.task_9_accept_class
+def test_task_9_accept_class(backup_reminders_csv):
+    # --- correct_imports ---------------------------------------------
     assert not hasattr(database, 'PoliteReminder'),\
         'You should no longer import `PoliteReminder` in `database`'
     assert not hasattr(database, 'DateReminder'),\
@@ -285,9 +286,7 @@ def test_task_9_correct_imports():
     assert hasattr(database, 'DeadlinedReminder'),\
         'You should import `DeadlinedReminder` in `database`'
 
-
-@pytest.mark.task_9_add_reminder_third_parameter
-def test_task_9_add_reminder_third_parameter():
+    # --- add_reminder_third_parameter --------------------------------
     signature = inspect.signature(database.add_reminder)
     params = list(signature.parameters)
     assert len(params) == 3,\
@@ -295,14 +294,10 @@ def test_task_9_add_reminder_third_parameter():
     assert params[2] == 'ReminderClass',\
         'The third parameter should be `ReminderClass`'
 
-
-@pytest.mark.task_9_add_reminder_date
-def test_task_9_add_reminder_date(backup_reminders_csv):
+    # --- add_reminder_date -------------------------------------------
     database.add_reminder('test_reminder', '1/1/2020', dr.DateReminder)
 
-
-@pytest.mark.task_9_add_reminder_incorrect
-def test_task_9_add_reminder_incorrect(backup_reminders_csv):
+    # --- add_reminder_incorrect --------------------------------------
     # NOTE: pytest.raises(TypeError) does not work here as we want custom message
     #       for the other exceptions, which would bubble up otherwise
     error_message = 'You should only allow conforming classes in `add_reminder`.'\
