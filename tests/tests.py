@@ -18,6 +18,7 @@ try:
     from src import deadlined_reminders as dr
     DEADLINED_REMINDERS_IMPORTED = True
 except ImportError:
+    dr = None
     DEADLINED_REMINDERS_IMPORTED = False
 
 from src.external_reminders import EveningReminder
@@ -73,6 +74,8 @@ def test_task_1_regular_class_implementation():
 
 @pytest.mark.task_2_overriding_text
 def test_task_2_overriding_text():
+    test_task_1_regular_class_implementation()
+
     polite_reminder = reminder.PoliteReminder('test_string')
     assert polite_reminder.text != polite_reminder.prefix + '<placeholder_text>',\
         'You should override the `text` property with the concatenation'
@@ -142,6 +145,8 @@ def test_task_4_DeadlinedReminder():
 
 @pytest.mark.task_5_concrete_subclass_stub
 def test_task_5_concrete_subclass_stub():
+    test_task_4_DeadlinedReminder()
+
     assert hasattr(dr, CONCRETE_CLASS_NAME), \
         f'Could not find class `{CONCRETE_CLASS_NAME}` in `deadlined_reminders.py`'
 
@@ -175,6 +180,8 @@ def test_task_5_concrete_subclass_stub():
 
 @pytest.mark.task_6_is_due
 def test_task_6_is_due():
+    test_task_5_concrete_subclass_stub()
+
     method_name = 'is_due'
 
     cls = getattr(dr, CONCRETE_CLASS_NAME)
@@ -205,6 +212,8 @@ def test_task_6_is_due():
 
 @pytest.mark.task_7_iter
 def test_task_7_iter():
+    test_task_5_concrete_subclass_stub()
+
     method_name = '__iter__'
 
     cls = getattr(dr, CONCRETE_CLASS_NAME)
@@ -277,6 +286,9 @@ def test_task_8_update_interface(backup_reminders_csv):
 
 @pytest.mark.task_9_accept_class
 def test_task_9_accept_class(backup_reminders_csv):
+    test_task_6_is_due()
+    test_task_7_iter()
+
     # --- correct_imports ---------------------------------------------
     assert not hasattr(database, 'PoliteReminder'),\
         'You should no longer import `PoliteReminder` in `database`'
@@ -313,7 +325,9 @@ def test_task_9_accept_class(backup_reminders_csv):
 # === TASK 10 ========================================================================
 
 @pytest.mark.task_10_subclasshook
-def test_app_opening_subclasshook(backup_reminders_csv):
+def test_task_10_subclasshook(backup_reminders_csv):
+    test_task_4_DeadlinedReminder()
+
     DeadlinedReminder = dr.DeadlinedReminder
     assert '__subclasshook__' in DeadlinedReminder.__dict__,\
         'Could not find `__subclasshook__` onto `DeadlinedReminder`'
@@ -343,7 +357,7 @@ def test_app_opening_subclasshook(backup_reminders_csv):
 # === TASK 11 ========================================================================
 
 @pytest.mark.task_11_add_reminder_isinstance
-def test_app_opening_add_reminder_isinstance():
+def test_task_11_add_reminder_isinstance():
     code_lines, starts_on = inspect.getsourcelines(database.add_reminder)
     EXISTS_LINE_WITH_issubclass = any('issubclass' in line for line in code_lines)
     assert not EXISTS_LINE_WITH_issubclass,\
@@ -373,6 +387,8 @@ def test_app_opening_add_reminder_isinstance():
 
 @pytest.mark.task_12_register_polite_reminder
 def test_task_12_register_polite_reminder():
+    test_task_1_regular_class_implementation()
+
     PoliteReminder = reminder.PoliteReminder
     assert hasattr(PoliteReminder, '__iter__'),\
         'You should add `__iter__` on PoliteReminder'
