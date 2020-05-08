@@ -30,6 +30,7 @@ To activate your environment, run:
 ```
 $ source reminders-venv/bin/activate
 ```
+Please ensure that your shell confirms the activation of the virtual environment before proceeding. This typically means that the shell displays something similar to ```(reminders-venv)``` at the beginning of each line.
 
 Then, if you need to work on a different project, you can deactivate your environment by running `deactivate` at the command prompt.
 
