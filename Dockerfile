@@ -1,10 +1,10 @@
 FROM python:3.8
 
-WORKDIR /app
+WORKDIR /src/app
 
-COPY requirements.txt /app
+COPY requirements.txt /src/app
 RUN pip install -r requirements.txt
 
-COPY . /app
+COPY . /src/app
 
-CMD ["python", "/app/app.py"]
+CMD ["python", "/src/app/app.py"]
