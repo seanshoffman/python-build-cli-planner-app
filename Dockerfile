@@ -1,10 +1,13 @@
-FROM python:3.8
+FROM python:3.7-alpine
 
-WORKDIR /src/app
+WORKDIR /src/app/
 
-COPY requirements.txt /src/app/
-RUN pip install -r requirements.txt
+COPY ./requirements.txt .
 
-COPY . /src/app/
+RUN ["pip", "install", "-r", "./requirements.txt"]
 
-CMD ["python", "/src/app/app.py"]
+COPY . .
+
+RUN addgroup -S projects && adduser -S -H projects -G projects
+RUN chown -R projects:projects /src/app
+USER projects
