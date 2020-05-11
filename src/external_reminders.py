@@ -3,6 +3,7 @@ consider as "external", whose source we do not control.
 """
 from dateutil.parser import parse
 from collections.abc import Iterable
+from datetime import datetime
 
 class DateTimeReminder(Iterable):
     """A reminder which has a specific date and time for being due"""
