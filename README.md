@@ -45,7 +45,7 @@ If you see a warning about `pip` being outdated, that's OK; `pip` updates freque
 
 At the root of your project, run
 ```
-$ pytest tests/tests.py
+$ pytest
 ```
 You should see all tests failing in the beginning, but no error about `pytest` itself. If so, you are ready to start making your app.
 
