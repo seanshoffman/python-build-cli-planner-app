@@ -19,6 +19,7 @@ def handle_input():
         date = input('When is that due?:')
 
         add_reminder(reminder, date, PoliteReminder)
+
         list_reminders()
     else:
         print("Invalid menu option")

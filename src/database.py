@@ -12,7 +12,7 @@ def list_reminders():
             for e in row:
                 print(e.ljust(32), end=' ')
         print()
-
+        
 def add_reminder(text, date, ReminderClass):
     reminder = ReminderClass(text, date)
 
