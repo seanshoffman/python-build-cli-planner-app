@@ -95,7 +95,7 @@ You will also have to ask the user for a date to go into your new reminder. In t
 
 ### Test your app
 
-At this point, your app should be able to handle reminders with text and date. If all the tests pass, feel free to play with it until you're ready for the next task.
+At this point, your app should be able to handle reminders with text and date. If the test for this task, together with the tests for all previous tasks, pass, feel free to play with the app until you're ready for the next task.
 
 ## Opening the app up to future extension
 
